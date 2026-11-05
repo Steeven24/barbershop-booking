@@ -48,10 +48,17 @@ docker compose up -d db
 cd backend
 cp .env.example .env
 uv sync
+uv run alembic upgrade head
 uv run fastapi dev app/main.py
 ```
 
 API docs available at http://localhost:8000/docs
+
+Create a new migration after changing models:
+
+```bash
+uv run alembic revision --autogenerate -m "describe change"
+```
 
 Run tests:
 
