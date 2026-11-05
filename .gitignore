@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+dist/
+*.log
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Editors / tools
+.vscode/
+.idea/
+.claude/
+CLAUDE.md
+
+# OS
+.DS_Store
+Thumbs.db
