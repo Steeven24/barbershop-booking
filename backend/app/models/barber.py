@@ -1,5 +1,5 @@
 from sqlalchemy import Boolean, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
 from app.models.base import TimestampMixin
@@ -13,3 +13,7 @@ class Barber(TimestampMixin, Base):
     phone: Mapped[str | None] = mapped_column(String(20))
     photo_url: Mapped[str | None] = mapped_column(String(500))
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+
+    working_hours: Mapped[list["WorkingHours"]] = relationship(  # noqa: F821
+        back_populates="barber", cascade="all, delete-orphan"
+    )
