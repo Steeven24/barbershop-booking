@@ -31,4 +31,30 @@ Commits follow [Conventional Commits](https://www.conventionalcommits.org/)
 
 ## Getting started
 
-Setup instructions will be added as each part of the project lands.
+### Requirements
+
+- Docker (for PostgreSQL)
+- Python 3.12+ and [uv](https://docs.astral.sh/uv/)
+
+### Database
+
+```bash
+docker compose up -d db
+```
+
+### Backend
+
+```bash
+cd backend
+cp .env.example .env
+uv sync
+uv run fastapi dev app/main.py
+```
+
+API docs available at http://localhost:8000/docs
+
+Run tests:
+
+```bash
+uv run pytest
+```
