@@ -60,8 +60,19 @@ Create a new migration after changing models:
 uv run alembic revision --autogenerate -m "describe change"
 ```
 
-Run tests:
+Run tests (needs the `db` container running; uses a separate
+`barbershop_test` database, created automatically):
 
 ```bash
 uv run pytest
 ```
+
+### API endpoints
+
+| Method         | Path                                  | Description                 |
+| -------------- | ------------------------------------- | --------------------------- |
+| GET/POST       | `/api/barbers`                        | List / create barbers       |
+| GET/PATCH/DEL  | `/api/barbers/{id}`                   | Get / update / deactivate   |
+| GET/PUT        | `/api/barbers/{id}/working-hours`     | Get / replace weekly hours  |
+| GET/POST       | `/api/services`                       | List / create services      |
+| GET/PATCH/DEL  | `/api/services/{id}`                  | Get / update / deactivate   |
