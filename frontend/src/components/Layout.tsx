@@ -1,6 +1,8 @@
 import { Link, NavLink, Outlet } from 'react-router'
 import styles from './Layout.module.css'
 
+const YEAR = new Date().getFullYear()
+
 export default function Layout() {
   return (
     <div className={styles.shell}>
@@ -26,7 +28,7 @@ export default function Layout() {
 
       <footer className={styles.footer}>
         <div className={styles.inner}>
-          <span>© {new Date().getFullYear()} La Navaja Barbería</span>
+          <span>© {YEAR} La Navaja Barbería</span>
           <span>Lun – Sáb · 09:00 – 19:00</span>
         </div>
       </footer>
