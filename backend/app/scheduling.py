@@ -67,3 +67,19 @@ def available_slots(
             slots.append((start, end))
         start += step
     return slots
+
+
+def validate_booking(
+    db: Session, barber_id: int, start: datetime, end: datetime, now: datetime | None = None
+) -> None:
+    """Raise SchedulingError if the barber can't take an appointment in [start, end)."""
+    now = now or datetime.now(settings.tz)
+    if start <= now:
+        raise SchedulingError("Appointments must be booked in the future")
+
+    local_start = start.astimezone(settings.tz)
+    window = working_window(db, barber_id, local_start.date())
+    if window is None or start < window[0] or end > window[1]:
+        raise SchedulingError("Barber is not working at that time")
+    if overlaps(start, end, busy_ranges(db, barber_id, start, end)):
+        raise SchedulingError("That time slot is already booked")
