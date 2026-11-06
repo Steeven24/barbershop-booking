@@ -76,3 +76,11 @@ uv run pytest
 | GET/PUT        | `/api/barbers/{id}/working-hours`     | Get / replace weekly hours  |
 | GET/POST       | `/api/services`                       | List / create services      |
 | GET/PATCH/DEL  | `/api/services/{id}`                  | Get / update / deactivate   |
+| GET            | `/api/availability`                   | Free slots for barber/day   |
+| GET/POST       | `/api/appointments`                   | List (filters) / book       |
+| GET            | `/api/appointments/{id}`              | Get appointment             |
+| PATCH          | `/api/appointments/{id}/status`       | Confirm / complete / cancel |
+
+Appointment status flow: `pending → confirmed → completed | no_show`,
+and `pending | confirmed → cancelled`. Times are handled in the business
+timezone (`TIMEZONE`, default `America/Guayaquil`).
