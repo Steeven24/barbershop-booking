@@ -1,4 +1,5 @@
 import os
+from datetime import date, timedelta
 
 import pytest
 from fastapi.testclient import TestClient
@@ -60,3 +61,24 @@ def client(engine):
     tables = ", ".join(t.name for t in Base.metadata.sorted_tables)
     with engine.begin() as conn:
         conn.execute(text(f"TRUNCATE {tables} RESTART IDENTITY CASCADE"))
+
+
+@pytest.fixture
+def next_monday():
+    """A Monday at least one week ahead, so slots are always in the future."""
+    today = date.today()
+    return today + timedelta(days=7 + (7 - today.weekday()) % 7)
+
+
+@pytest.fixture
+def barber(client):
+    barber = client.post("/api/barbers", json={"name": "Carlos"}).json()
+    schedule = [{"weekday": 0, "start_time": "09:00", "end_time": "12:00"}]
+    client.put(f"/api/barbers/{barber['id']}/working-hours", json=schedule)
+    return barber
+
+
+@pytest.fixture
+def service(client):
+    payload = {"name": "Haircut", "duration_minutes": 30, "price": "8.50"}
+    return client.post("/api/services", json=payload).json()
