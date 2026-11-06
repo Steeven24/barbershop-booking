@@ -23,6 +23,13 @@ export default function Layout() {
       <main className={styles.main}>
         <Outlet />
       </main>
+
+      <footer className={styles.footer}>
+        <div className={styles.inner}>
+          <span>© {new Date().getFullYear()} La Navaja Barbería</span>
+          <span>Lun – Sáb · 09:00 – 19:00</span>
+        </div>
+      </footer>
     </div>
   )
 }
