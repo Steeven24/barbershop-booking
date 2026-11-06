@@ -42,6 +42,39 @@
   background: var(--color-accent-hover);
 }
 
+.hours {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-top: 3px solid var(--color-accent);
+  border-radius: var(--radius);
+  padding: var(--space-6);
+  box-shadow: var(--shadow);
+}
+
+.hours h2 {
+  font-size: 1.25rem;
+}
+
+.hours dl {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+}
+
+.hours dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.section {
+  padding-top: var(--space-12);
+}
+
+.section h2 {
+  font-size: 1.75rem;
+}
+
 @media (max-width: 760px) {
   .hero {
     grid-template-columns: 1fr;

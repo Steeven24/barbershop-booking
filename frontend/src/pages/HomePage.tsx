@@ -1,4 +1,6 @@
 import { Link } from 'react-router'
+import BarberList from '../components/BarberList'
+import ServiceMenu from '../components/ServiceMenu'
 import styles from './HomePage.module.css'
 
 export default function HomePage() {
@@ -16,8 +18,28 @@ export default function HomePage() {
             Reservar cita
           </Link>
         </div>
+        <aside className={styles.hours}>
+          <h2>Horario</h2>
+          <dl>
+            <dt>Lunes a viernes</dt>
+            <dd>09:00 – 19:00</dd>
+            <dt>Sábado</dt>
+            <dd>09:00 – 15:00</dd>
+            <dt>Domingo</dt>
+            <dd>Cerrado</dd>
+          </dl>
+        </aside>
       </section>
 
+      <section className={styles.section}>
+        <h2>Servicios</h2>
+        <ServiceMenu />
+      </section>
+
+      <section className={styles.section}>
+        <h2>Nuestro equipo</h2>
+        <BarberList />
+      </section>
     </>
   )
 }
