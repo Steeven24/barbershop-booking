@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
+from app.routers import barbers, services
 
 app = FastAPI(title="Barbershop Booking API", version="0.1.0")
 
@@ -17,3 +18,7 @@ app.add_middleware(
 @app.get("/api/health", tags=["health"])
 def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+app.include_router(barbers.router, prefix="/api")
+app.include_router(services.router, prefix="/api")
