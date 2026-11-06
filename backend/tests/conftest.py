@@ -12,7 +12,10 @@ from app.database import Base, get_db
 from app.main import app
 
 TEST_DATABASE_URL = os.getenv(
-    "TEST_DATABASE_URL", str(make_url(settings.database_url).set(database="barbershop_test"))
+    "TEST_DATABASE_URL",
+    make_url(settings.database_url)
+    .set(database="barbershop_test")
+    .render_as_string(hide_password=False),
 )
 
 
