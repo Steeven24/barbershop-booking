@@ -29,7 +29,7 @@ export default function Layout() {
       <footer className={styles.footer}>
         <div className={styles.inner}>
           <span>© {YEAR} La Navaja Barbería</span>
-          <span>Lun – Sáb · 09:00 – 19:00</span>
+          <span>Lun – Vie 09:00 – 19:00 · Sáb 09:00 – 15:00</span>
         </div>
       </footer>
     </div>
