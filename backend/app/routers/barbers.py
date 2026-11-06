@@ -3,8 +3,13 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.database import DbSession
-from app.models import Barber
+from app.models import Barber, WorkingHours
 from app.schemas.barber import BarberCreate, BarberRead, BarberUpdate
+from app.schemas.working_hours import (
+    WorkingHoursBase,
+    WorkingHoursRead,
+    ensure_unique_weekdays,
+)
 
 router = APIRouter(prefix="/barbers", tags=["barbers"])
 
@@ -54,3 +59,26 @@ def deactivate_barber(barber_id: int, db: DbSession):
     barber = get_barber_or_404(barber_id, db)
     barber.is_active = False
     db.commit()
+
+
+@router.get("/{barber_id}/working-hours", response_model=list[WorkingHoursRead])
+def get_working_hours(barber_id: int, db: DbSession):
+    barber = get_barber_or_404(barber_id, db)
+    return sorted(barber.working_hours, key=lambda wh: wh.weekday)
+
+
+@router.put("/{barber_id}/working-hours", response_model=list[WorkingHoursRead])
+def replace_working_hours(barber_id: int, data: list[WorkingHoursBase], db: DbSession):
+    """Replace the whole weekly schedule. Days not included are days off."""
+    barber = get_barber_or_404(barber_id, db)
+    try:
+        ensure_unique_weekdays(data)
+    except ValueError as exc:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(exc)) from None
+
+    barber.working_hours.clear()
+    db.flush()
+    barber.working_hours.extend(WorkingHours(**item.model_dump()) for item in data)
+    db.commit()
+    db.refresh(barber)
+    return sorted(barber.working_hours, key=lambda wh: wh.weekday)
