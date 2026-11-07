@@ -29,3 +29,6 @@ def get_current_admin(
 
 
 CurrentAdmin = Annotated[User, Depends(get_current_admin)]
+
+# For endpoints that need an authenticated admin but don't use the user object
+AdminOnly = Depends(get_current_admin)

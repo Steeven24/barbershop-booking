@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.auth import AdminOnly
 from app.database import DbSession
 from app.models import Barber, WorkingHours
 from app.schemas.barber import BarberCreate, BarberRead, BarberUpdate
@@ -34,7 +35,9 @@ def get_barber(barber_id: int, db: DbSession):
     return get_barber_or_404(barber_id, db)
 
 
-@router.post("", response_model=BarberRead, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "", dependencies=[AdminOnly], response_model=BarberRead, status_code=status.HTTP_201_CREATED
+)
 def create_barber(data: BarberCreate, db: DbSession):
     barber = Barber(**data.model_dump())
     db.add(barber)
@@ -43,7 +46,7 @@ def create_barber(data: BarberCreate, db: DbSession):
     return barber
 
 
-@router.patch("/{barber_id}", response_model=BarberRead)
+@router.patch("/{barber_id}", dependencies=[AdminOnly], response_model=BarberRead)
 def update_barber(barber_id: int, data: BarberUpdate, db: DbSession):
     barber = get_barber_or_404(barber_id, db)
     for field, value in data.model_dump(exclude_unset=True).items():
@@ -53,7 +56,7 @@ def update_barber(barber_id: int, data: BarberUpdate, db: DbSession):
     return barber
 
 
-@router.delete("/{barber_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{barber_id}", dependencies=[AdminOnly], status_code=status.HTTP_204_NO_CONTENT)
 def deactivate_barber(barber_id: int, db: DbSession):
     # Soft delete: barbers with past appointments must keep their history
     barber = get_barber_or_404(barber_id, db)
@@ -67,7 +70,9 @@ def get_working_hours(barber_id: int, db: DbSession):
     return sorted(barber.working_hours, key=lambda wh: wh.weekday)
 
 
-@router.put("/{barber_id}/working-hours", response_model=list[WorkingHoursRead])
+@router.put(
+    "/{barber_id}/working-hours", dependencies=[AdminOnly], response_model=list[WorkingHoursRead]
+)
 def replace_working_hours(barber_id: int, data: list[WorkingHoursBase], db: DbSession):
     """Replace the whole weekly schedule. Days not included are days off."""
     barber = get_barber_or_404(barber_id, db)

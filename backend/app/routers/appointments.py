@@ -4,6 +4,7 @@ from typing import Annotated
 from fastapi import APIRouter, HTTPException, Query, status
 from sqlalchemy import select
 
+from app.auth import AdminOnly
 from app.config import settings
 from app.database import DbSession
 from app.models import Appointment, AppointmentStatus, Barber, Service
@@ -42,7 +43,7 @@ def create_appointment(data: AppointmentCreate, db: DbSession):
     return appointment
 
 
-@router.get("", response_model=list[AppointmentRead])
+@router.get("", dependencies=[AdminOnly], response_model=list[AppointmentRead])
 def list_appointments(
     db: DbSession,
     barber_id: int | None = None,
@@ -62,7 +63,7 @@ def list_appointments(
     return db.scalars(query).all()
 
 
-@router.get("/{appointment_id}", response_model=AppointmentRead)
+@router.get("/{appointment_id}", dependencies=[AdminOnly], response_model=AppointmentRead)
 def get_appointment(appointment_id: int, db: DbSession):
     appointment = db.get(Appointment, appointment_id)
     if appointment is None:
@@ -70,7 +71,7 @@ def get_appointment(appointment_id: int, db: DbSession):
     return appointment
 
 
-@router.patch("/{appointment_id}/status", response_model=AppointmentRead)
+@router.patch("/{appointment_id}/status", dependencies=[AdminOnly], response_model=AppointmentRead)
 def update_appointment_status(appointment_id: int, data: AppointmentStatusUpdate, db: DbSession):
     appointment = get_appointment(appointment_id, db)
     if data.status not in ALLOWED_TRANSITIONS.get(appointment.status, set()):
