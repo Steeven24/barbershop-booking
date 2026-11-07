@@ -1,6 +1,5 @@
 import styles from './Booking.module.css'
-
-export const STEPS = ['Servicio', 'Barbero', 'Fecha y hora', 'Tus datos'] as const
+import { STEPS } from './steps'
 
 interface Props {
   current: number
