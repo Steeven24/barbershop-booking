@@ -7,10 +7,14 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.engine import make_url
 from sqlalchemy.orm import sessionmaker
 
-import app.models
 from app.config import settings
 from app.database import Base, get_db
 from app.main import app
+from app.models import User
+from app.security import create_access_token, hash_password
+
+ADMIN_EMAIL = "owner@example.com"
+ADMIN_PASSWORD = "s3cret-pass"
 
 TEST_DATABASE_URL = os.getenv(
     "TEST_DATABASE_URL",
@@ -44,7 +48,7 @@ def engine():
 
 
 @pytest.fixture
-def client(engine):
+def db_session(engine):
     TestSession = sessionmaker(bind=engine, autoflush=False)
 
     def override_get_db():
@@ -55,12 +59,35 @@ def client(engine):
             db.close()
 
     app.dependency_overrides[get_db] = override_get_db
-    yield TestClient(app)
+    yield TestSession
     app.dependency_overrides.clear()
 
     tables = ", ".join(t.name for t in Base.metadata.sorted_tables)
     with engine.begin() as conn:
         conn.execute(text(f"TRUNCATE {tables} RESTART IDENTITY CASCADE"))
+
+
+@pytest.fixture
+def admin(db_session):
+    with db_session() as db:
+        user = User(
+            email=ADMIN_EMAIL, full_name="Owner", hashed_password=hash_password(ADMIN_PASSWORD)
+        )
+        db.add(user)
+        db.commit()
+        return user.id
+
+
+@pytest.fixture
+def public_client(db_session):
+    """Client without credentials, like a customer browsing the site."""
+    return TestClient(app)
+
+
+@pytest.fixture
+def client(admin):
+    """Client authenticated as the barbershop admin."""
+    return TestClient(app, headers={"Authorization": f"Bearer {create_access_token(admin)}"})
 
 
 @pytest.fixture
