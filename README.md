@@ -3,6 +3,13 @@
 Online appointment booking system for barbershops — clients pick a barber,
 service and time slot; owners manage schedules and bookings.
 
+## Features
+
+- Public home page with services, prices, team and opening hours
+- 4-step online booking: service → barber → day & time → contact details
+- Real-time availability based on each barber's weekly schedule and existing bookings
+- Double-booking protection, with a friendly retry if a slot is taken meanwhile
+
 ## Stack
 
 | Layer    | Technology                     |

@@ -14,3 +14,27 @@ export interface Service {
   price: string
   is_active: boolean
 }
+
+export type AppointmentStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled' | 'no_show'
+
+export interface AvailableSlot {
+  start_at: string
+  end_at: string
+}
+
+export interface AppointmentCreate {
+  barber_id: number
+  service_id: number
+  customer_name: string
+  customer_email: string
+  customer_phone: string | null
+  start_at: string
+  notes: string | null
+}
+
+export interface Appointment extends AppointmentCreate {
+  id: number
+  end_at: string
+  status: AppointmentStatus
+  created_at: string
+}
