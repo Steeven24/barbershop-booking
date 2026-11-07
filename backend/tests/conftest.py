@@ -15,6 +15,8 @@ from app.security import create_access_token, hash_password
 
 ADMIN_EMAIL = "owner@example.com"
 ADMIN_PASSWORD = "s3cret-pass"
+# Argon2 is slow on purpose: hash once instead of in every test
+ADMIN_PASSWORD_HASH = hash_password(ADMIN_PASSWORD)
 
 TEST_DATABASE_URL = os.getenv(
     "TEST_DATABASE_URL",
@@ -70,9 +72,7 @@ def db_session(engine):
 @pytest.fixture
 def admin(db_session):
     with db_session() as db:
-        user = User(
-            email=ADMIN_EMAIL, full_name="Owner", hashed_password=hash_password(ADMIN_PASSWORD)
-        )
+        user = User(email=ADMIN_EMAIL, full_name="Owner", hashed_password=ADMIN_PASSWORD_HASH)
         db.add(user)
         db.commit()
         return user.id
