@@ -6,6 +6,7 @@ const timeFormat = new Intl.DateTimeFormat('es-EC', {
   timeZone: BUSINESS_TZ,
   hour: '2-digit',
   minute: '2-digit',
+  hourCycle: 'h23',
 })
 const longDayFormat = new Intl.DateTimeFormat('es-EC', {
   timeZone: BUSINESS_TZ,

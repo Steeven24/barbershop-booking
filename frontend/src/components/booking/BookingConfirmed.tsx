@@ -20,7 +20,7 @@ export default function BookingConfirmed({ appointment, service, barber, onBookA
       <p className={styles.lead}>
         Reservaste <strong>{service.name}</strong> con <strong>{barber.name}</strong> el{' '}
         <span className={styles.lower}>{formatLongDay(appointment.start_at)}</span> a las{' '}
-        {formatTime(appointment.start_at)}.
+        {formatTime(appointment.start_at)}
       </p>
       <p className={styles.note}>
         Tu cita queda pendiente hasta que la barbería la confirme. Si necesitas cambiarla,
