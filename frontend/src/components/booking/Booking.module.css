@@ -1,0 +1,67 @@
+.steps {
+  list-style: none;
+  display: flex;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-8);
+  padding: 0;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.steps li {
+  flex: 1;
+}
+
+.steps button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) 0;
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  color: var(--color-muted);
+  cursor: pointer;
+  text-align: left;
+}
+
+.steps button:disabled {
+  cursor: default;
+}
+
+.steps [data-state='current'] button {
+  color: var(--color-ink);
+  border-bottom-color: var(--color-accent);
+  font-weight: 600;
+}
+
+.steps [data-state='done'] button:hover {
+  color: var(--color-ink);
+}
+
+.stepNumber {
+  width: 1.6rem;
+  height: 1.6rem;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  font-size: 0.8rem;
+}
+
+.steps [data-state='done'] .stepNumber {
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+  color: var(--color-surface);
+}
+
+@media (max-width: 640px) {
+  .stepLabel {
+    display: none;
+  }
+  .steps [data-state='current'] .stepLabel {
+    display: inline;
+  }
+}
