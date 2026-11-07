@@ -16,7 +16,14 @@ interface Props {
   onSelect: (slot: AvailableSlot) => void
 }
 
-export default function SlotStep({ barberId, serviceId, day, selected, onDayChange, onSelect }: Props) {
+export default function SlotStep({
+  barberId,
+  serviceId,
+  day,
+  selected,
+  onDayChange,
+  onSelect,
+}: Props) {
   const activeDay = day ?? DAYS[0]
   const fetchSlots = useCallback(
     () => getAvailability(barberId, serviceId, activeDay),
