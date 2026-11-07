@@ -1,0 +1,28 @@
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: var(--space-12);
+}
+
+.title {
+  font-size: 2rem;
+}
+
+.note {
+  color: var(--color-muted);
+}
+
+.alert {
+  padding: var(--space-3) var(--space-4);
+  background: #f8e8e5;
+  border-left: 3px solid var(--color-danger);
+  color: var(--color-danger);
+  border-radius: var(--radius);
+}
+
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+}
