@@ -1,0 +1,42 @@
+/* Styled like a classic barbershop price board */
+.menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.name {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+}
+
+.dots {
+  flex: 1;
+  border-bottom: 1px dotted var(--color-brass);
+  transform: translateY(-4px);
+}
+
+.price {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.meta {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+.note {
+  color: var(--color-muted);
+}

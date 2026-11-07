@@ -35,6 +35,7 @@ Commits follow [Conventional Commits](https://www.conventionalcommits.org/)
 
 - Docker (for PostgreSQL)
 - Python 3.12+ and [uv](https://docs.astral.sh/uv/)
+- Node.js 20+
 
 ### Database
 
@@ -66,6 +67,17 @@ Run tests (needs the `db` container running; uses a separate
 ```bash
 uv run pytest
 ```
+
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+App available at http://localhost:5173. During development Vite proxies
+`/api` requests to the backend on port 8000, so start the backend first.
 
 ### API endpoints
 
