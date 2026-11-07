@@ -22,7 +22,9 @@ interface FieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChan
 function Field({ label, onChange, required, ...input }: FieldProps) {
   return (
     <label>
-      {label} {!required && <span className={styles.optional}>(opcional)</span>}
+      <span>
+        {label} {!required && <span className={styles.optional}>(opcional)</span>}
+      </span>
       <input required={required} onChange={(e) => onChange(e.target.value)} {...input} />
     </label>
   )
@@ -49,7 +51,9 @@ export default function DetailsStep({ submitting, error, onSubmit }: Props) {
       <Field label="Teléfono" type="tel" maxLength={20} autoComplete="tel"
         value={details.phone} onChange={update('phone')} />
       <label>
-        Notas para el barbero <span className={styles.optional}>(opcional)</span>
+        <span>
+          Notas para el barbero <span className={styles.optional}>(opcional)</span>
+        </span>
         <textarea rows={3} maxLength={500} value={details.notes}
           onChange={(e) => update('notes')(e.target.value)} />
       </label>
