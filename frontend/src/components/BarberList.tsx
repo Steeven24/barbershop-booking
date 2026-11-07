@@ -1,15 +1,7 @@
 import { getBarbers } from '../api/catalog'
 import { useFetch } from '../hooks/useFetch'
+import { initials } from '../lib/text'
 import styles from './BarberList.module.css'
-
-function initials(name: string) {
-  return name
-    .split(' ')
-    .slice(0, 2)
-    .map((part) => part[0])
-    .join('')
-    .toUpperCase()
-}
 
 export default function BarberList() {
   const { data: barbers, error, loading } = useFetch(getBarbers)
