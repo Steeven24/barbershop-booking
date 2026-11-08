@@ -44,6 +44,19 @@ Commits follow [Conventional Commits](https://www.conventionalcommits.org/)
 - Python 3.12+ and [uv](https://docs.astral.sh/uv/)
 - Node.js 20+
 
+### Environment variables
+
+Credentials are never stored in the repo. Copy the examples and fill them in:
+
+```bash
+cp .env.example .env                  # PostgreSQL user, password and database
+cp backend/.env.example backend/.env  # DATABASE_URL, SECRET_KEY, ...
+```
+
+- `DATABASE_URL` must use the same user, password and database as the root `.env`.
+- Generate `SECRET_KEY` with `python -c "import secrets; print(secrets.token_urlsafe(48))"`.
+- The backend refuses to start if `DATABASE_URL` or `SECRET_KEY` are missing.
+
 ### Database
 
 ```bash
@@ -54,7 +67,6 @@ docker compose up -d db
 
 ```bash
 cd backend
-cp .env.example .env
 uv sync
 uv run alembic upgrade head
 uv run python -m app.cli create-admin owner@example.com "Owner Name"
@@ -69,8 +81,8 @@ Create a new migration after changing models:
 uv run alembic revision --autogenerate -m "describe change"
 ```
 
-Run tests (needs the `db` container running; uses a separate
-`barbershop_test` database, created automatically):
+Run tests (needs the `db` container running; uses a separate `<database>_test`
+database created automatically, or `TEST_DATABASE_URL` if set):
 
 ```bash
 uv run pytest
@@ -90,8 +102,7 @@ App available at http://localhost:5173. During development Vite proxies
 ### API endpoints
 
 Admin endpoints require a token: get one with `POST /api/auth/login` and send
-it as `Authorization: Bearer <token>`. Set a strong `SECRET_KEY` in `.env` for
-any non-local environment.
+it as `Authorization: Bearer <token>`.
 
 | Method | Path                              | Access | Description                  |
 | ------ | --------------------------------- | ------ | ---------------------------- |
