@@ -1,4 +1,4 @@
-import os
+import secrets
 from datetime import date, timedelta
 
 import pytest
@@ -14,16 +14,18 @@ from app.models import User
 from app.security import create_access_token, hash_password
 
 ADMIN_EMAIL = "owner@example.com"
-ADMIN_PASSWORD = "s3cret-pass"
+# Random per run, so no credential is stored in the repo
+ADMIN_PASSWORD = secrets.token_urlsafe(16)
 # Argon2 is slow on purpose: hash once instead of in every test
 ADMIN_PASSWORD_HASH = hash_password(ADMIN_PASSWORD)
 
-TEST_DATABASE_URL = os.getenv(
-    "TEST_DATABASE_URL",
-    make_url(settings.database_url)
-    .set(database="barbershop_test")
-    .render_as_string(hide_password=False),
-)
+
+def default_test_database_url() -> str:
+    url = make_url(settings.database_url)
+    return url.set(database=f"{url.database}_test").render_as_string(hide_password=False)
+
+
+TEST_DATABASE_URL = settings.test_database_url or default_test_database_url()
 
 
 def ensure_database_exists(url: str) -> None:
