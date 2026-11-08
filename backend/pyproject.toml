@@ -9,6 +9,8 @@ dependencies = [
     "psycopg[binary]>=3.2",
     "pydantic-settings>=2.5",
     "alembic>=1.13",
+    "pyjwt>=2.9",
+    "pwdlib[argon2]>=0.2",
 ]
 
 [dependency-groups]

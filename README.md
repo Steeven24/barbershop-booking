@@ -57,6 +57,7 @@ cd backend
 cp .env.example .env
 uv sync
 uv run alembic upgrade head
+uv run python -m app.cli create-admin owner@example.com "Owner Name"
 uv run fastapi dev app/main.py
 ```
 
@@ -88,17 +89,29 @@ App available at http://localhost:5173. During development Vite proxies
 
 ### API endpoints
 
-| Method         | Path                                  | Description                 |
-| -------------- | ------------------------------------- | --------------------------- |
-| GET/POST       | `/api/barbers`                        | List / create barbers       |
-| GET/PATCH/DEL  | `/api/barbers/{id}`                   | Get / update / deactivate   |
-| GET/PUT        | `/api/barbers/{id}/working-hours`     | Get / replace weekly hours  |
-| GET/POST       | `/api/services`                       | List / create services      |
-| GET/PATCH/DEL  | `/api/services/{id}`                  | Get / update / deactivate   |
-| GET            | `/api/availability`                   | Free slots for barber/day   |
-| GET/POST       | `/api/appointments`                   | List (filters) / book       |
-| GET            | `/api/appointments/{id}`              | Get appointment             |
-| PATCH          | `/api/appointments/{id}/status`       | Confirm / complete / cancel |
+Admin endpoints require a token: get one with `POST /api/auth/login` and send
+it as `Authorization: Bearer <token>`. Set a strong `SECRET_KEY` in `.env` for
+any non-local environment.
+
+| Method | Path                              | Access | Description                  |
+| ------ | --------------------------------- | ------ | ---------------------------- |
+| POST   | `/api/auth/login`                 | Public | Get an admin access token    |
+| GET    | `/api/auth/me`                    | Admin  | Current admin                |
+| GET    | `/api/barbers`, `/api/barbers/{id}` | Public | List / get barbers         |
+| POST   | `/api/barbers`                    | Admin  | Create barber                |
+| PATCH  | `/api/barbers/{id}`               | Admin  | Update barber                |
+| DELETE | `/api/barbers/{id}`               | Admin  | Deactivate barber            |
+| GET    | `/api/barbers/{id}/working-hours` | Public | Weekly schedule              |
+| PUT    | `/api/barbers/{id}/working-hours` | Admin  | Replace weekly schedule      |
+| GET    | `/api/services`, `/api/services/{id}` | Public | List / get services      |
+| POST   | `/api/services`                   | Admin  | Create service               |
+| PATCH  | `/api/services/{id}`              | Admin  | Update service               |
+| DELETE | `/api/services/{id}`              | Admin  | Deactivate service           |
+| GET    | `/api/availability`               | Public | Free slots for barber/day    |
+| POST   | `/api/appointments`               | Public | Book an appointment          |
+| GET    | `/api/appointments`               | Admin  | List with filters            |
+| GET    | `/api/appointments/{id}`          | Admin  | Get appointment              |
+| PATCH  | `/api/appointments/{id}/status`   | Admin  | Confirm / complete / cancel  |
 
 Appointment status flow: `pending → confirmed → completed | no_show`,
 and `pending | confirmed → cancelled`. Times are handled in the business

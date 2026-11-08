@@ -11,6 +11,10 @@ class Settings(BaseSettings):
     timezone: str = "America/Guayaquil"
     slot_step_minutes: int = 15
 
+    # Auth: always override SECRET_KEY outside local development
+    secret_key: str = "dev-only-insecure-secret-key-change-me-in-prod"
+    access_token_expire_minutes: int = 60 * 8
+
     @property
     def tz(self) -> ZoneInfo:
         return ZoneInfo(self.timezone)
