@@ -11,6 +11,7 @@ service and time slot; owners manage schedules and bookings.
 - Double-booking protection, with a friendly retry if a slot is taken meanwhile
 - Admin panel (`/admin`): login, daily agenda with filters, summary and status actions
 - Catalog management: create, edit and (de)activate barbers and services, and edit each barber's weekly schedule
+- Email notifications to customers when they book and when the appointment is confirmed or cancelled
 
 ## Stack
 
@@ -59,11 +60,17 @@ cp backend/.env.example backend/.env  # DATABASE_URL, SECRET_KEY, ...
 - Generate `SECRET_KEY` with `python -c "import secrets; print(secrets.token_urlsafe(48))"`.
 - The backend refuses to start if `DATABASE_URL` or `SECRET_KEY` are missing.
 
-### Database
+### Database and local email
 
 ```bash
-docker compose up -d db
+docker compose up -d db mailpit
 ```
+
+[Mailpit](https://mailpit.axllent.org/) catches every email sent in development;
+open http://localhost:8025 to read them. To use it, set in `backend/.env`:
+`SMTP_HOST=localhost`, `SMTP_PORT=1025`, `SMTP_STARTTLS=false`. Without
+`SMTP_HOST` emails are only written to the backend log. For production use any
+SMTP provider through the `SMTP_*` variables.
 
 ### Backend
 
