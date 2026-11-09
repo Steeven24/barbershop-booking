@@ -41,16 +41,14 @@ export default function ServicesPage() {
     <>
       <div className={styles.header}>
         <h1>Servicios</h1>
-        {!editing && (
-          <button
-            type="button"
-            className={styles.button}
-            data-tone="primary"
-            onClick={() => setEditing('new')}
-          >
-            Nuevo servicio
-          </button>
-        )}
+        <button
+          type="button"
+          className={styles.button}
+          data-tone="primary"
+          onClick={() => setEditing('new')}
+        >
+          Nuevo servicio
+        </button>
       </div>
 
       {editing && (
