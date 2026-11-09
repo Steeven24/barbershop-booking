@@ -1,6 +1,6 @@
 <div align="center">
 
-# ✂️ Barbershop Booking
+# Barbershop Booking
 
 **Online appointment booking for barbershops.**
 Customers pick a service, a barber and a free time slot; owners manage the
@@ -18,7 +18,7 @@ agenda, the team and the schedule from an admin panel.
 
 </div>
 
-## ✨ Features
+## Features
 
 **For customers**
 
@@ -40,7 +40,7 @@ agenda, the team and the schedule from an admin panel.
 - Fully configured through environment variables — no secrets in the repo
 - Tested API, CI on every pull request and a one-command Docker setup
 
-## 📸 Screenshots
+## Screenshots
 
 | Home | Admin agenda |
 | :---: | :---: |
@@ -48,7 +48,7 @@ agenda, the team and the schedule from an admin panel.
 | **Weekly schedule editor** | **Booking on mobile** |
 | <img src="docs/screenshots/admin-schedule.png" alt="Barber weekly schedule editor" width="420"> | <img src="docs/screenshots/booking-mobile.png" alt="Booking flow on mobile" width="200"> |
 
-## 🧰 Tech stack
+## Tech stack
 
 | Layer          | Technology                                                    |
 | -------------- | ------------------------------------------------------------- |
@@ -58,7 +58,7 @@ agenda, the team and the schedule from an admin panel.
 | Tooling        | uv, Ruff, pytest, oxlint                                       |
 | Infrastructure | Docker, nginx, GitHub Actions, Mailpit (local email)           |
 
-## 🏗️ Architecture
+## Architecture
 
 ```mermaid
 flowchart LR
@@ -68,7 +68,7 @@ flowchart LR
     A -. emails .-> M[SMTP<br/>Mailpit in dev]
 ```
 
-## 📁 Project structure
+## Project structure
 
 ```
 barbershop-booking/
@@ -91,7 +91,7 @@ barbershop-booking/
 └── docker-compose.yml
 ```
 
-## 🚀 Quick start (Docker)
+## Quick start (Docker)
 
 Requires Docker with Compose v2.
 
@@ -115,7 +115,7 @@ docker compose exec backend python -m app.cli create-admin you@example.com "Your
 
 Migrations run automatically when the backend container starts.
 
-## 🛠️ Local development
+## Local development
 
 Requirements: Python 3.12+, [uv](https://docs.astral.sh/uv/), Node.js 20+ and Docker.
 
@@ -144,7 +144,7 @@ npm run dev
 After changing models, create a migration with
 `uv run alembic revision --autogenerate -m "describe change"`.
 
-## ⚙️ Configuration
+## Configuration
 
 All settings come from environment variables; secrets are never committed.
 `.env.example` files list every variable with empty placeholders.
@@ -167,7 +167,7 @@ python -c "import secrets; print(secrets.token_urlsafe(48))"
 
 The backend refuses to start if `DATABASE_URL` or `SECRET_KEY` are missing.
 
-## 📡 API
+## API
 
 Interactive docs at `/docs` when the backend runs locally. Admin endpoints need
 `Authorization: Bearer <token>` from `POST /api/auth/login`.
@@ -200,7 +200,7 @@ Appointment status flow: `pending → confirmed → completed | no_show`, and
 
 </details>
 
-## ✅ Testing & CI
+## Testing & CI
 
 ```bash
 cd backend && uv run pytest             # API tests (needs the db container)
@@ -211,7 +211,7 @@ Tests use a separate `<database>_test` database, created automatically. Every
 pull request runs [GitHub Actions](.github/workflows/ci.yml): Ruff and pytest
 for the backend, lint and build for the frontend, and both Docker image builds.
 
-## 🌿 Workflow
+## Workflow
 
 - `main` — stable releases · `develop` — integration · `feature/*` — new work, merged into `develop` through pull requests
 - Commits follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat`, `fix`, `docs`, `chore`, …)
