@@ -23,8 +23,8 @@ export default function BookingConfirmed({ appointment, service, barber, onBookA
         {formatTime(appointment.start_at)}
       </p>
       <p className={styles.note}>
-        Tu cita queda pendiente hasta que la barbería la confirme. Si necesitas cambiarla,
-        escríbenos o llámanos.
+        Te enviamos los detalles a {appointment.customer_email}. La cita queda pendiente hasta
+        que la barbería la confirme, y también te avisaremos por correo.
       </p>
       <div className={styles.actions}>
         <Link to="/" className={styles.primary}>
