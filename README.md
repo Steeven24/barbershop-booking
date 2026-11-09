@@ -46,7 +46,7 @@ agenda, the team and the schedule from an admin panel.
 | :---: | :---: |
 | <img src="docs/screenshots/home.png" alt="Home page" width="420"> | <img src="docs/screenshots/admin-agenda.png" alt="Admin daily agenda" width="420"> |
 | **Weekly schedule editor** | **Booking on mobile** |
-| <img src="docs/screenshots/admin-schedule.png" alt="Barber weekly schedule editor" width="420"> | <img src="docs/screenshots/booking-mobile.png" alt="Booking flow on mobile" width="200"> |
+| <img src="docs/screenshots/admin-schedule.png" alt="Barber weekly schedule editor" width="420"> | <img src="docs/screenshots/booking-mobile.png" alt="Booking flow on mobile" width="190"> |
 
 ## Tech stack
 
