@@ -38,3 +38,9 @@ export interface Appointment extends AppointmentCreate {
   status: AppointmentStatus
   created_at: string
 }
+
+export interface AdminUser {
+  id: number
+  email: string
+  full_name: string
+}
