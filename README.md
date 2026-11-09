@@ -1,17 +1,44 @@
-# Barbershop Booking
+<div align="center">
 
-Online appointment booking system for barbershops — clients pick a barber,
-service and time slot; owners manage schedules and bookings.
+# ✂️ Barbershop Booking
 
-## Features
+**Online appointment booking for barbershops.**
+Customers pick a service, a barber and a free time slot; owners manage the
+agenda, the team and the schedule from an admin panel.
 
-- Public home page with services, prices, team and opening hours
-- 4-step online booking: service → barber → day & time → contact details
-- Real-time availability based on each barber's weekly schedule and existing bookings
-- Double-booking protection, with a friendly retry if a slot is taken meanwhile
-- Admin panel (`/admin`): login, daily agenda with filters, summary and status actions
-- Catalog management: create, edit and (de)activate barbers and services, and edit each barber's weekly schedule
-- Email notifications to customers when they book and when the appointment is confirmed or cancelled
+[![CI](https://github.com/Steeven24/barbershop-booking/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/Steeven24/barbershop-booking/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)
+
+<img src="docs/screenshots/booking.png" alt="Booking flow: choosing a day and time slot" width="900">
+
+</div>
+
+## ✨ Features
+
+**For customers**
+
+- Home page with services, prices, team and opening hours
+- 4-step booking: service → barber → day & time → contact details
+- Real-time availability from each barber's weekly schedule and existing bookings
+- Email when the booking is received, confirmed or cancelled
+
+**For the barbershop**
+
+- Admin panel with secure login (JWT, Argon2 password hashing)
+- Daily agenda with filters, a summary of the day and one-click status changes
+- Manage barbers, services and each barber's weekly schedule
+
+**Under the hood**
+
+- Double-booking protection with row locking, plus a friendly retry in the UI
+- All times handled in the business timezone
+- Fully configured through environment variables — no secrets in the repo
+- Tested API, CI on every pull request and a one-command Docker setup
 
 ## Stack
 
