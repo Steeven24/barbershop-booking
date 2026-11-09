@@ -40,31 +40,56 @@ agenda, the team and the schedule from an admin panel.
 - Fully configured through environment variables — no secrets in the repo
 - Tested API, CI on every pull request and a one-command Docker setup
 
-## Stack
+## 📸 Screenshots
 
-| Layer    | Technology                     |
-| -------- | ------------------------------ |
-| Frontend | React + Vite                   |
-| Backend  | FastAPI + SQLAlchemy + Alembic |
-| Database | PostgreSQL                     |
+| Home | Admin agenda |
+| :---: | :---: |
+| <img src="docs/screenshots/home.png" alt="Home page" width="420"> | <img src="docs/screenshots/admin-agenda.png" alt="Admin daily agenda" width="420"> |
+| **Weekly schedule editor** | **Booking on mobile** |
+| <img src="docs/screenshots/admin-schedule.png" alt="Barber weekly schedule editor" width="420"> | <img src="docs/screenshots/booking-mobile.png" alt="Booking flow on mobile" width="200"> |
 
-## Monorepo structure
+## 🧰 Tech stack
+
+| Layer          | Technology                                                    |
+| -------------- | ------------------------------------------------------------- |
+| Frontend       | React 19, TypeScript, Vite, React Router, CSS Modules          |
+| Backend        | FastAPI, SQLAlchemy 2, Alembic, Pydantic, PyJWT, pwdlib        |
+| Database       | PostgreSQL 16                                                  |
+| Tooling        | uv, Ruff, pytest, oxlint                                       |
+| Infrastructure | Docker, nginx, GitHub Actions, Mailpit (local email)           |
+
+## 🏗️ Architecture
+
+```mermaid
+flowchart LR
+    U([Customer / Admin]) --> N[nginx<br/>React SPA]
+    N -- /api --> A[FastAPI]
+    A --> D[(PostgreSQL)]
+    A -. emails .-> M[SMTP<br/>Mailpit in dev]
+```
+
+## 📁 Project structure
 
 ```
 barbershop-booking/
-├── backend/    # FastAPI REST API
-├── frontend/   # React SPA
+├── backend/                # FastAPI REST API
+│   ├── app/
+│   │   ├── models/         # SQLAlchemy models
+│   │   ├── routers/        # API endpoints
+│   │   ├── schemas/        # Pydantic request/response models
+│   │   ├── scheduling.py   # Availability and booking rules
+│   │   └── notifications.py
+│   ├── migrations/         # Alembic migrations
+│   └── tests/
+├── frontend/               # React SPA (public site + admin panel)
+│   └── src/
+│       ├── api/            # Typed API client
+│       ├── components/     # UI components (booking, admin, layout)
+│       └── pages/
+├── docs/screenshots/
+├── .github/workflows/      # CI
 └── docker-compose.yml
 ```
-
-## Branching model
-
-- `main` — stable, production-ready code
-- `develop` — integration branch
-- `feature/*` — new features, branched from `develop` and merged back via PR
-
-Commits follow [Conventional Commits](https://www.conventionalcommits.org/)
-(`feat`, `fix`, `chore`, `docs`, `refactor`, `test`, ...).
 
 ## Getting started
 
