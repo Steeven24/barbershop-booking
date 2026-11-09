@@ -144,10 +144,36 @@ npm run dev
 After changing models, create a migration with
 `uv run alembic revision --autogenerate -m "describe change"`.
 
-### API endpoints
+## ⚙️ Configuration
 
-Admin endpoints require a token: get one with `POST /api/auth/login` and send
-it as `Authorization: Bearer <token>`.
+All settings come from environment variables; secrets are never committed.
+`.env.example` files list every variable with empty placeholders.
+
+| Variable                               | Where           | Description                                        |
+| -------------------------------------- | --------------- | -------------------------------------------------- |
+| `POSTGRES_USER` / `_PASSWORD` / `_DB`  | `.env`          | Database credentials used by Docker Compose        |
+| `DATABASE_URL`                         | `backend/.env`  | SQLAlchemy URL (same credentials as above)         |
+| `SECRET_KEY`                           | `backend/.env`  | JWT signing key, at least 32 characters            |
+| `ACCESS_TOKEN_EXPIRE_MINUTES`          | `backend/.env`  | Admin session length (default 480)                 |
+| `TIMEZONE`                             | `backend/.env`  | Business timezone (default `America/Guayaquil`)    |
+| `BUSINESS_NAME`                        | `backend/.env`  | Name used in emails                                |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_STARTTLS`, `EMAIL_FROM` | `backend/.env` | Email delivery. Without `SMTP_HOST` emails are only logged |
+
+Generate a secret key with:
+
+```bash
+python -c "import secrets; print(secrets.token_urlsafe(48))"
+```
+
+The backend refuses to start if `DATABASE_URL` or `SECRET_KEY` are missing.
+
+## 📡 API
+
+Interactive docs at `/docs` when the backend runs locally. Admin endpoints need
+`Authorization: Bearer <token>` from `POST /api/auth/login`.
+
+<details>
+<summary>Endpoint reference</summary>
 
 | Method | Path                              | Access | Description                  |
 | ------ | --------------------------------- | ------ | ---------------------------- |
@@ -169,6 +195,23 @@ it as `Authorization: Bearer <token>`.
 | GET    | `/api/appointments/{id}`          | Admin  | Get appointment              |
 | PATCH  | `/api/appointments/{id}/status`   | Admin  | Confirm / complete / cancel  |
 
-Appointment status flow: `pending → confirmed → completed | no_show`,
-and `pending | confirmed → cancelled`. Times are handled in the business
-timezone (`TIMEZONE`, default `America/Guayaquil`).
+Appointment status flow: `pending → confirmed → completed | no_show`, and
+`pending | confirmed → cancelled`.
+
+</details>
+
+## ✅ Testing & CI
+
+```bash
+cd backend && uv run pytest             # API tests (needs the db container)
+cd frontend && npm run lint && npm run build
+```
+
+Tests use a separate `<database>_test` database, created automatically. Every
+pull request runs [GitHub Actions](.github/workflows/ci.yml): Ruff and pytest
+for the backend, lint and build for the frontend, and both Docker image builds.
+
+## 🌿 Workflow
+
+- `main` — stable releases · `develop` — integration · `feature/*` — new work, merged into `develop` through pull requests
+- Commits follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat`, `fix`, `docs`, `chore`, …)
