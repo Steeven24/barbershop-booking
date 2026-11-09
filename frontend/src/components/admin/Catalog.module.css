@@ -178,3 +178,18 @@
   width: 1rem;
   height: 1rem;
 }
+
+@media (max-width: 640px) {
+  .item {
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: var(--space-4);
+  }
+  .actions {
+    grid-column: 1 / -1;
+    flex-wrap: wrap;
+  }
+  .scheduleRow {
+    grid-template-columns: 7rem auto auto auto;
+    gap: var(--space-2);
+  }
+}
