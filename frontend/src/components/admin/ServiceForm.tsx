@@ -65,7 +65,7 @@ export default function ServiceForm({ service, onSave, onCancel }: Props) {
         required
         type="number"
         min={0}
-        step={0.25}
+        step={0.01}
         value={price}
         onChange={setPrice}
       />
