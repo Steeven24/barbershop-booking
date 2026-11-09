@@ -36,3 +36,12 @@ export function dayParts(day: string) {
     month: date.toLocaleDateString('es-EC', { month: 'short' }).replace('.', ''),
   }
 }
+
+export const today = () => upcomingDays(1)[0]
+
+/** Move a YYYY-MM-DD day by `delta` days. */
+export function shiftDay(day: string, delta: number): string {
+  const date = toDate(day)
+  date.setDate(date.getDate() + delta)
+  return isoDay.format(date)
+}

@@ -9,6 +9,7 @@ service and time slot; owners manage schedules and bookings.
 - 4-step online booking: service → barber → day & time → contact details
 - Real-time availability based on each barber's weekly schedule and existing bookings
 - Double-booking protection, with a friendly retry if a slot is taken meanwhile
+- Admin panel (`/admin`): login, daily agenda with filters, summary and status actions
 
 ## Stack
 
@@ -98,6 +99,9 @@ npm run dev
 
 App available at http://localhost:5173. During development Vite proxies
 `/api` requests to the backend on port 8000, so start the backend first.
+
+The admin panel lives at http://localhost:5173/admin. Sign in with the account
+created by `python -m app.cli create-admin`.
 
 ### API endpoints
 

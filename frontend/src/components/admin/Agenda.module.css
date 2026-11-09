@@ -1,0 +1,225 @@
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.dayNav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.dayNav button {
+  min-width: 2.25rem;
+  height: 2.25rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.dayNav button:hover {
+  border-color: var(--color-brass);
+}
+
+.dayNav .todayButton {
+  font-size: 0.875rem;
+  padding: 0 var(--space-3);
+}
+
+.dayTitle {
+  margin: 0 var(--space-2);
+  font-size: 1.6rem;
+}
+
+.dayTitle::first-letter {
+  text-transform: uppercase;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.filters input,
+.filters select {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  color: var(--color-ink);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+}
+
+.row {
+  display: grid;
+  /* Fixed outer columns keep every row aligned, whatever actions it shows */
+  grid-template-columns: 4.5rem minmax(0, 1.4fr) minmax(0, 1fr) 7rem 19rem;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.row[data-status='cancelled'],
+.row[data-status='no_show'] {
+  opacity: 0.55;
+}
+
+.time,
+.customer,
+.detail {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.time {
+  font-variant-numeric: tabular-nums;
+}
+
+.time span,
+.customer span,
+.muted {
+  color: var(--color-muted);
+  font-size: 0.85rem;
+}
+
+.notes {
+  margin: var(--space-1) 0 0;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--color-muted);
+}
+
+.badge {
+  justify-self: start;
+  padding: 2px var(--space-2);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--color-line);
+}
+
+.badge[data-status='pending'] {
+  background: #f4ead6;
+  color: #7a5a1e;
+}
+
+.badge[data-status='confirmed'] {
+  background: #e3ece4;
+  color: var(--color-success);
+}
+
+.badge[data-status='completed'] {
+  background: var(--color-ink);
+  color: var(--color-surface);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+.actions button {
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius);
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.actions [data-tone='primary'] {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-surface);
+}
+
+.actions [data-tone='danger'] {
+  color: var(--color-danger);
+}
+
+.actions button:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+@media (max-width: 860px) {
+  .row {
+    grid-template-columns: 4rem minmax(0, 1fr);
+    padding: var(--space-4);
+  }
+  .dayTitle {
+    font-size: 1.25rem;
+  }
+  .detail,
+  .badge,
+  .actions {
+    grid-column: 2;
+  }
+  .actions {
+    justify-content: flex-start;
+  }
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-3);
+  margin: 0 0 var(--space-6);
+}
+
+.summary div {
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+}
+
+.summary dt {
+  color: var(--color-muted);
+  font-size: 0.8rem;
+}
+
+.summary dd {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+}
+
+.empty {
+  color: var(--color-muted);
+}
+
+.alert {
+  padding: var(--space-3) var(--space-4);
+  background: #f8e8e5;
+  border-left: 3px solid var(--color-danger);
+  color: var(--color-danger);
+  border-radius: var(--radius);
+}
