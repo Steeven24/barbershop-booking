@@ -1,0 +1,59 @@
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.dayNav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.dayNav button {
+  min-width: 2.25rem;
+  height: 2.25rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.dayNav button:hover {
+  border-color: var(--color-brass);
+}
+
+.dayNav .todayButton {
+  font-size: 0.875rem;
+  padding: 0 var(--space-3);
+}
+
+.dayTitle {
+  margin: 0 var(--space-2);
+  font-size: 1.6rem;
+}
+
+.dayTitle::first-letter {
+  text-transform: uppercase;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.filters input,
+.filters select {
+  font: inherit;
+  font-size: 0.9rem;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+  color: var(--color-ink);
+}
