@@ -91,65 +91,49 @@ barbershop-booking/
 └── docker-compose.yml
 ```
 
-## Getting started
+## 🚀 Quick start (Docker)
 
-### Requirements
-
-- Docker (for PostgreSQL)
-- Python 3.12+ and [uv](https://docs.astral.sh/uv/)
-- Node.js 20+
-
-### Environment variables
-
-Credentials are never stored in the repo. Copy the examples and fill them in:
+Requires Docker with Compose v2.
 
 ```bash
-cp .env.example .env                  # PostgreSQL user, password and database
-cp backend/.env.example backend/.env  # DATABASE_URL, SECRET_KEY, ...
+git clone https://github.com/Steeven24/barbershop-booking.git
+cd barbershop-booking
+
+cp .env.example .env                   # database user, password and name
+cp backend/.env.example backend/.env   # SECRET_KEY and other settings
+# Fill in the values (see Configuration below), then:
+
+docker compose up -d --build
+docker compose exec backend python -m app.cli create-admin you@example.com "Your Name"
 ```
 
-- `DATABASE_URL` must use the same user, password and database as the root `.env`.
-- Generate `SECRET_KEY` with `python -c "import secrets; print(secrets.token_urlsafe(48))"`.
-- The backend refuses to start if `DATABASE_URL` or `SECRET_KEY` are missing.
+| Service       | URL                          |
+| ------------- | ---------------------------- |
+| App           | http://localhost:8080        |
+| Admin panel   | http://localhost:8080/admin  |
+| Email inbox   | http://localhost:8025        |
 
-### Database and local email
+Migrations run automatically when the backend container starts.
+
+## 🛠️ Local development
+
+Requirements: Python 3.12+, [uv](https://docs.astral.sh/uv/), Node.js 20+ and Docker.
 
 ```bash
-docker compose up -d db mailpit
+docker compose up -d db mailpit        # PostgreSQL + local email inbox
 ```
 
-[Mailpit](https://mailpit.axllent.org/) catches every email sent in development;
-open http://localhost:8025 to read them. To use it, set in `backend/.env`:
-`SMTP_HOST=localhost`, `SMTP_PORT=1025`, `SMTP_STARTTLS=false`. Without
-`SMTP_HOST` emails are only written to the backend log. For production use any
-SMTP provider through the `SMTP_*` variables.
-
-### Backend
+**Backend** — http://localhost:8000/docs
 
 ```bash
 cd backend
 uv sync
 uv run alembic upgrade head
-uv run python -m app.cli create-admin owner@example.com "Owner Name"
+uv run python -m app.cli create-admin you@example.com "Your Name"
 uv run fastapi dev app/main.py
 ```
 
-API docs available at http://localhost:8000/docs
-
-Create a new migration after changing models:
-
-```bash
-uv run alembic revision --autogenerate -m "describe change"
-```
-
-Run tests (needs the `db` container running; uses a separate `<database>_test`
-database created automatically, or `TEST_DATABASE_URL` if set):
-
-```bash
-uv run pytest
-```
-
-### Frontend
+**Frontend** — http://localhost:5173 (Vite proxies `/api` to the backend)
 
 ```bash
 cd frontend
@@ -157,11 +141,8 @@ npm install
 npm run dev
 ```
 
-App available at http://localhost:5173. During development Vite proxies
-`/api` requests to the backend on port 8000, so start the backend first.
-
-The admin panel lives at http://localhost:5173/admin. Sign in with the account
-created by `python -m app.cli create-admin`.
+After changing models, create a migration with
+`uv run alembic revision --autogenerate -m "describe change"`.
 
 ### API endpoints
 
