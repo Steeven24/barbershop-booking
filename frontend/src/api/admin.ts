@@ -1,5 +1,13 @@
 import { request } from './client'
-import type { Appointment, AppointmentStatus, Barber, Service } from './types'
+import type {
+  Appointment,
+  AppointmentStatus,
+  Barber,
+  BarberInput,
+  Service,
+  ServiceInput,
+  WorkingHours,
+} from './types'
 
 interface AppointmentFilters {
   day?: string
@@ -24,3 +32,22 @@ export const updateAppointmentStatus = (id: number, status: AppointmentStatus) =
 // Admins also need inactive records, e.g. to show who served a past appointment
 export const listAllBarbers = () => request<Barber[]>('/barbers?include_inactive=true')
 export const listAllServices = () => request<Service[]>('/services?include_inactive=true')
+
+const json = (method: string, body: unknown): RequestInit => ({
+  method,
+  body: JSON.stringify(body),
+})
+
+export const createBarber = (data: BarberInput) => request<Barber>('/barbers', json('POST', data))
+export const updateBarber = (id: number, data: Partial<BarberInput & { is_active: boolean }>) =>
+  request<Barber>(`/barbers/${id}`, json('PATCH', data))
+
+export const getWorkingHours = (barberId: number) =>
+  request<WorkingHours[]>(`/barbers/${barberId}/working-hours`)
+export const saveWorkingHours = (barberId: number, hours: WorkingHours[]) =>
+  request<WorkingHours[]>(`/barbers/${barberId}/working-hours`, json('PUT', hours))
+
+export const createService = (data: ServiceInput) =>
+  request<Service>('/services', json('POST', data))
+export const updateService = (id: number, data: Partial<ServiceInput & { is_active: boolean }>) =>
+  request<Service>(`/services/${id}`, json('PATCH', data))
