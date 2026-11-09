@@ -16,6 +16,8 @@ export default function AdminLayout() {
             <NavLink to="/admin" end>
               Agenda
             </NavLink>
+            <NavLink to="/admin/barberos">Barberos</NavLink>
+            <NavLink to="/admin/servicios">Servicios</NavLink>
           </nav>
           <div className={styles.user}>
             <span>{user?.full_name}</span>

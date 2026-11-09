@@ -10,6 +10,7 @@ service and time slot; owners manage schedules and bookings.
 - Real-time availability based on each barber's weekly schedule and existing bookings
 - Double-booking protection, with a friendly retry if a slot is taken meanwhile
 - Admin panel (`/admin`): login, daily agenda with filters, summary and status actions
+- Catalog management: create, edit and (de)activate barbers and services, and edit each barber's weekly schedule
 
 ## Stack
 
