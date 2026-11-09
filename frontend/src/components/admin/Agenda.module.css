@@ -69,7 +69,8 @@
 
 .row {
   display: grid;
-  grid-template-columns: 4.5rem minmax(0, 1.4fr) minmax(0, 1fr) 7rem auto;
+  /* Fixed outer columns keep every row aligned, whatever actions it shows */
+  grid-template-columns: 4.5rem minmax(0, 1.4fr) minmax(0, 1fr) 7rem 19rem;
   align-items: center;
   gap: var(--space-4);
   padding: var(--space-4) var(--space-6);
@@ -137,6 +138,7 @@
 
 .actions {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--space-2);
 }
@@ -148,6 +150,7 @@
   background: var(--color-surface);
   font-size: 0.85rem;
   font-weight: 600;
+  white-space: nowrap;
   cursor: pointer;
 }
 
@@ -169,6 +172,10 @@
 @media (max-width: 860px) {
   .row {
     grid-template-columns: 4rem minmax(0, 1fr);
+    padding: var(--space-4);
+  }
+  .dayTitle {
+    font-size: 1.25rem;
   }
   .detail,
   .badge,
