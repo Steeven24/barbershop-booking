@@ -18,6 +18,16 @@ class Settings(BaseSettings):
     secret_key: str = Field(min_length=32)
     access_token_expire_minutes: int = 60 * 8
 
+    business_name: str = "La Navaja Barbería"
+
+    # Email: without SMTP_HOST, emails are only written to the log
+    smtp_host: str | None = None
+    smtp_port: int = 587
+    smtp_user: str | None = None
+    smtp_password: str | None = None
+    smtp_starttls: bool = True
+    email_from: str = "no-reply@example.com"
+
     @property
     def tz(self) -> ZoneInfo:
         return ZoneInfo(self.timezone)

@@ -1,17 +1,27 @@
 from datetime import date, datetime, time, timedelta
 from typing import Annotated
 
-from fastapi import APIRouter, HTTPException, Query, status
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Query, status
 from sqlalchemy import select
 
 from app.auth import AdminOnly
 from app.config import settings
 from app.database import DbSession
+from app.email import send_email
 from app.models import Appointment, AppointmentStatus, Barber, Service
+from app.notifications import appointment_email
 from app.scheduling import SchedulingError, validate_booking
 from app.schemas.appointment import AppointmentCreate, AppointmentRead, AppointmentStatusUpdate
 
 router = APIRouter(prefix="/appointments", tags=["appointments"])
+
+
+def notify_customer(appointment: Appointment, background: BackgroundTasks) -> None:
+    # The message is built now, while the DB session is open; only sending runs later
+    message = appointment_email(appointment)
+    if message is not None:
+        background.add_task(send_email, message)
+
 
 S = AppointmentStatus
 ALLOWED_TRANSITIONS = {
@@ -21,7 +31,7 @@ ALLOWED_TRANSITIONS = {
 
 
 @router.post("", response_model=AppointmentRead, status_code=status.HTTP_201_CREATED)
-def create_appointment(data: AppointmentCreate, db: DbSession):
+def create_appointment(data: AppointmentCreate, db: DbSession, background: BackgroundTasks):
     # Lock the barber row so concurrent bookings for the same barber are serialized
     barber = db.scalar(select(Barber).where(Barber.id == data.barber_id).with_for_update())
     service = db.get(Service, data.service_id)
@@ -40,6 +50,7 @@ def create_appointment(data: AppointmentCreate, db: DbSession):
     db.add(appointment)
     db.commit()
     db.refresh(appointment)
+    notify_customer(appointment, background)
     return appointment
 
 
@@ -72,7 +83,9 @@ def get_appointment(appointment_id: int, db: DbSession):
 
 
 @router.patch("/{appointment_id}/status", dependencies=[AdminOnly], response_model=AppointmentRead)
-def update_appointment_status(appointment_id: int, data: AppointmentStatusUpdate, db: DbSession):
+def update_appointment_status(
+    appointment_id: int, data: AppointmentStatusUpdate, db: DbSession, background: BackgroundTasks
+):
     appointment = get_appointment(appointment_id, db)
     if data.status not in ALLOWED_TRANSITIONS.get(appointment.status, set()):
         raise HTTPException(
@@ -82,4 +95,5 @@ def update_appointment_status(appointment_id: int, data: AppointmentStatusUpdate
     appointment.status = data.status
     db.commit()
     db.refresh(appointment)
+    notify_customer(appointment, background)
     return appointment

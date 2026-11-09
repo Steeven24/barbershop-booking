@@ -16,5 +16,13 @@ services:
       interval: 5s
       retries: 5
 
+  # Local SMTP server that catches every email; inbox at http://localhost:8025
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: barbershop-mailpit
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
 volumes:
   pgdata:

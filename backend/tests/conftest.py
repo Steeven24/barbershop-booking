@@ -111,3 +111,9 @@ def barber(client):
 def service(client):
     payload = {"name": "Haircut", "duration_minutes": 30, "price": "8.50"}
     return client.post("/api/services", json=payload).json()
+
+
+@pytest.fixture(autouse=True)
+def no_real_emails(monkeypatch):
+    """Never send real emails from tests, even if SMTP is configured in .env."""
+    monkeypatch.setattr(settings, "smtp_host", None)
