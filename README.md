@@ -215,3 +215,4 @@ for the backend, lint and build for the frontend, and both Docker image builds.
 
 - `main` — stable releases · `develop` — integration · `feature/*` — new work, merged into `develop` through pull requests
 - Commits follow [Conventional Commits](https://www.conventionalcommits.org/) (`feat`, `fix`, `docs`, `chore`, …)
+- Release notes live in [CHANGELOG.md](CHANGELOG.md)
