@@ -1,6 +1,6 @@
 [project]
 name = "barbershop-backend"
-version = "0.1.0"
+version = "1.0.0"
 description = "REST API for the barbershop booking system"
 requires-python = ">=3.12"
 dependencies = [
