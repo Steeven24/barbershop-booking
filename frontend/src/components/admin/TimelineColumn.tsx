@@ -5,6 +5,7 @@ import styles from './Timeline.module.css'
 
 interface Props {
   height: number
+  hourPx: number
   /** Minutes since midnight → px from the top of the column */
   px: (minutes: number) => number
   window: WorkingHours | undefined
@@ -20,9 +21,10 @@ export default function TimelineColumn(props: Props) {
   const minutes = (iso: string) => toMinutes(formatTime(iso))
   const opensAt = window ? px(toMinutes(window.start_time)) : 0
   const closesAt = window ? px(toMinutes(window.end_time)) : 0
+  const columnStyle = { height: props.height, backgroundSize: `100% ${props.hourPx}px` }
 
   return (
-    <div className={styles.column} style={{ height: props.height }}>
+    <div className={styles.column} style={columnStyle}>
       {window ? (
         <>
           <span className={styles.off} style={{ top: 0, height: opensAt }} />
@@ -43,6 +45,7 @@ export default function TimelineColumn(props: Props) {
             type="button"
             className={styles.block}
             data-status={a.status}
+            data-compact={height < 48 || undefined}
             aria-pressed={a.id === selectedId}
             style={{ top: top + 2, height: height - 4 }}
             onClick={() => props.onSelect(a)}

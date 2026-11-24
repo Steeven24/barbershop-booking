@@ -5,7 +5,8 @@ import { initials } from '../../lib/text'
 import styles from './Timeline.module.css'
 import TimelineColumn from './TimelineColumn'
 
-const HOUR_PX = 64
+// Tall enough for a 30-minute appointment to show name and time on two lines
+const HOUR_PX = 96
 const TONES = ['#efe3d0', '#f1e4e0', '#e4e6dc', '#e9e3ef']
 
 interface Props {
@@ -64,6 +65,7 @@ export default function Timeline(props: Props) {
           <TimelineColumn
             key={barber.id}
             height={hours.length * HOUR_PX}
+            hourPx={HOUR_PX}
             px={px}
             window={windowOf(barber.id)}
             appointments={appointments.filter((a) => a.barber_id === barber.id)}

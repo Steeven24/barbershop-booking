@@ -60,7 +60,9 @@
 .column {
   position: relative;
   border-left: 1px solid var(--color-line);
-  background: repeating-linear-gradient(180deg, var(--color-surface) 0 63px, #efe9df 63px 64px);
+  /* One grid line per hour; the hour height comes from backgroundSize */
+  background: linear-gradient(180deg, transparent calc(100% - 1px), #efe9df calc(100% - 1px));
+  background-color: var(--color-surface);
 }
 
 /* Hours outside the barber's schedule */
@@ -106,6 +108,14 @@
 
 .block span {
   font-size: 0.75rem;
+}
+
+/* Short appointments: name and time on a single line */
+.block[data-compact] {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  padding-block: 0;
 }
 
 .block[aria-pressed='true'] {
