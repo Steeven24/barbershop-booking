@@ -25,13 +25,13 @@ export default function BookingSummary({ service, barber, slot, action, onChange
   return (
     <aside className={styles.summary}>
       <h2>Tu cita</h2>
-      {(service || barber) && (
+      {barber && (
         <div className={styles.who}>
           <span className={styles.avatar} aria-hidden="true">
-            {barber ? initials(barber.name) : '?'}
+            {initials(barber.name)}
           </span>
           <span className={styles.whoText}>
-            <strong>{barber?.name ?? 'Sin barbero aún'}</strong>
+            <strong>{barber.name}</strong>
             <span>{service ? `${service.name} · ${service.duration_minutes} min` : '—'}</span>
           </span>
           <button type="button" className={styles.link} onClick={onChange}>
@@ -40,6 +40,12 @@ export default function BookingSummary({ service, barber, slot, action, onChange
         </div>
       )}
       <dl className={styles.details}>
+        {!barber && (
+          <>
+            <dt>Servicio</dt>
+            <dd>{service?.name ?? '—'}</dd>
+          </>
+        )}
         <dt>Fecha</dt>
         <dd className={styles.capitalize}>{slot ? formatLongDay(slot.start_at) : '—'}</dd>
         <dt>Hora</dt>
