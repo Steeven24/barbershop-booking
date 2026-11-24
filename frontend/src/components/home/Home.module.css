@@ -329,6 +329,17 @@
   font-weight: 400;
 }
 
+/* Without a map the card spans the row, so the hours sit in columns */
+.visitCard:only-child .hours {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-4);
+}
+
+.visitCard:only-child .hours div {
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
 .map {
   width: 100%;
   min-height: 340px;
