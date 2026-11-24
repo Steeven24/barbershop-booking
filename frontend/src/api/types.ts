@@ -53,3 +53,31 @@ export interface WorkingHours {
 
 export type BarberInput = Pick<Barber, 'name' | 'phone' | 'photo_url'>
 export type ServiceInput = Pick<Service, 'name' | 'description' | 'duration_minutes' | 'price'>
+
+export type StatsPeriod = 'day' | 'week' | 'month'
+
+export interface PeriodTotals {
+  revenue: string
+  completed: number
+  no_shows: number
+  occupancy: number
+}
+
+export interface Stats {
+  period: StatsPeriod
+  start: string
+  end: string
+  current: PeriodTotals
+  previous: PeriodTotals
+  week: { date: string; revenue: string }[]
+  team: BarberStats[]
+  top_services: { service_id: number; name: string; appointments: number; value: string }[]
+}
+
+export interface BarberStats {
+  barber_id: number
+  name: string
+  appointments: number
+  revenue: string
+  occupancy: number
+}

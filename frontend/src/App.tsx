@@ -8,6 +8,7 @@ import AgendaPage from './pages/admin/AgendaPage'
 import BarbersPage from './pages/admin/BarbersPage'
 import LoginPage from './pages/admin/LoginPage'
 import ServicesPage from './pages/admin/ServicesPage'
+import SummaryPage from './pages/admin/SummaryPage'
 import BookingPage from './pages/BookingPage'
 import HomePage from './pages/HomePage'
 import NotFoundPage from './pages/NotFoundPage'
@@ -35,7 +36,8 @@ export default function App() {
               </RequireAuth>
             }
           >
-            <Route index element={<AgendaPage />} />
+            <Route index element={<SummaryPage />} />
+            <Route path="agenda" element={<AgendaPage />} />
             <Route path="barberos" element={<BarbersPage />} />
             <Route path="servicios" element={<ServicesPage />} />
           </Route>
