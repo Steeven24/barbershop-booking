@@ -1,5 +1,6 @@
 import { type FormEvent, type InputHTMLAttributes, useState } from 'react'
 import styles from './Booking.module.css'
+import { DETAILS_FORM_ID } from './steps'
 
 export interface CustomerDetails {
   name: string
@@ -9,7 +10,6 @@ export interface CustomerDetails {
 }
 
 interface Props {
-  submitting: boolean
   error: string | null
   onSubmit: (details: CustomerDetails) => void
 }
@@ -32,7 +32,7 @@ function Field({ label, onChange, required, ...input }: FieldProps) {
 
 const EMPTY: CustomerDetails = { name: '', email: '', phone: '', notes: '' }
 
-export default function DetailsStep({ submitting, error, onSubmit }: Props) {
+export default function DetailsStep({ error, onSubmit }: Props) {
   const [details, setDetails] = useState(EMPTY)
   const update = (field: keyof CustomerDetails) => (value: string) =>
     setDetails((current) => ({ ...current, [field]: value }))
@@ -43,7 +43,7 @@ export default function DetailsStep({ submitting, error, onSubmit }: Props) {
   }
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit}>
+    <form id={DETAILS_FORM_ID} className={styles.form} onSubmit={handleSubmit}>
       <Field label="Nombre" required minLength={2} maxLength={100} autoComplete="name"
         value={details.name} onChange={update('name')} />
       <Field label="Correo electrónico" required type="email" autoComplete="email"
@@ -59,9 +59,6 @@ export default function DetailsStep({ submitting, error, onSubmit }: Props) {
       </label>
 
       {error && <p className={styles.error} role="alert">{error}</p>}
-      <button type="submit" className={styles.primary} disabled={submitting}>
-        {submitting ? 'Reservando…' : 'Confirmar reserva'}
-      </button>
     </form>
   )
 }

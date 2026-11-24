@@ -3,11 +3,12 @@ import { useSearchParams } from 'react-router'
 import { getBarbers, getServices } from '../api/catalog'
 import BarberStep from '../components/booking/BarberStep'
 import BookingConfirmed from '../components/booking/BookingConfirmed'
-import BookingSummary from '../components/booking/BookingSummary'
+import BookingSummary, { type SummaryAction } from '../components/booking/BookingSummary'
 import DetailsStep from '../components/booking/DetailsStep'
 import ServiceStep from '../components/booking/ServiceStep'
 import SlotStep from '../components/booking/SlotStep'
 import StepIndicator from '../components/booking/StepIndicator'
+import { DETAILS_FORM_ID } from '../components/booking/steps'
 import { useBookingFlow } from '../hooks/useBookingFlow'
 import { useFetch } from '../hooks/useFetch'
 import { formatTime, relativeDay } from '../lib/dates'
@@ -52,6 +53,17 @@ function BookingFlow({ onRestart }: { onRestart: () => void }) {
       : 'Elige un horario',
     'Nombre y contacto',
   ]
+  let action: SummaryAction | null = null
+  if (flow.step === 2) {
+    action = {
+      label: flow.slot ? 'Continuar con tus datos' : 'Elige un horario',
+      disabled: !flow.slot,
+      onClick: flow.continueToDetails,
+    }
+  } else if (flow.step === 3) {
+    const label = flow.submitting ? 'Reservando…' : 'Confirmar reserva'
+    action = { label, disabled: flow.submitting, form: DETAILS_FORM_ID }
+  }
   return (
     <section>
       <StepIndicator current={flow.step} values={stepValues} onSelect={flow.setStep} />
@@ -89,10 +101,16 @@ function BookingFlow({ onRestart }: { onRestart: () => void }) {
             />
           )}
           {flow.step === 3 && (
-            <DetailsStep submitting={flow.submitting} error={flow.error} onSubmit={flow.submit} />
+            <DetailsStep error={flow.error} onSubmit={flow.submit} />
           )}
         </div>
-        <BookingSummary service={flow.service} barber={flow.barber} slot={flow.slot} />
+        <BookingSummary
+          service={flow.service}
+          barber={flow.barber}
+          slot={flow.slot}
+          action={action}
+          onChange={() => flow.setStep(flow.barber ? 1 : 0)}
+        />
       </div>
     </section>
   )
