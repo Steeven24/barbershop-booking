@@ -215,28 +215,63 @@
   color: var(--color-surface);
 }
 
+.slotGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.slotGroupHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.slotGroupHead span {
+  color: var(--color-muted);
+  font-size: 0.8rem;
+}
+
+.slotGroupHead .rule {
+  flex: 1;
+  height: 1px;
+  background: var(--color-line);
+}
+
 .slots {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
-  gap: var(--space-2);
+  grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+  gap: 10px;
 }
 
 .slot {
-  padding: var(--space-2) 0;
+  height: 48px;
+  border: 1px solid #d8cdbb;
+  border-radius: 12px;
   background: var(--color-surface);
-  border: 1px solid var(--color-line);
-  border-radius: var(--radius);
+  color: var(--color-ink);
+  font-size: 0.95rem;
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
   cursor: pointer;
 }
 
-.slot:hover {
+.slot:hover:not(:disabled) {
   border-color: var(--color-brass);
 }
 
+.slot:disabled {
+  border-color: var(--color-line);
+  background: transparent;
+  color: #8a8076;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
 .slot[aria-pressed='true'] {
-  background: var(--color-accent);
   border-color: var(--color-accent);
+  background: var(--color-accent);
   color: var(--color-surface);
 }
 
