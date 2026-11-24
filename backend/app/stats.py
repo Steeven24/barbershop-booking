@@ -9,8 +9,8 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session, joinedload
 
 from app.config import settings
-from app.models import Appointment, AppointmentStatus, WorkingHours
-from app.schemas.stats import DayRevenue, PeriodTotals
+from app.models import Appointment, AppointmentStatus, Barber, WorkingHours
+from app.schemas.stats import BarberStats, DayRevenue, PeriodTotals, ServiceStats
 
 Period = Literal["day", "week", "month"]
 S = AppointmentStatus
@@ -98,3 +98,43 @@ def week_revenue(appointments: list[Appointment], days: list[date]) -> list[DayR
         )
         for day in days
     ]
+
+
+def team_stats(db: Session, appointments: list[Appointment], days: list[date]) -> list[BarberStats]:
+    hours_by_barber: dict[int, list[WorkingHours]] = {}
+    for h in db.scalars(select(WorkingHours)):
+        hours_by_barber.setdefault(h.barber_id, []).append(h)
+    # Active barbers, plus inactive ones who still had appointments in the period
+    barbers = [
+        b for b in db.scalars(select(Barber).order_by(Barber.name))
+        if b.is_active or any(a.barber_id == b.id for a in appointments)
+    ]  # fmt: skip
+    stats = []
+    for barber in barbers:
+        own = [a for a in appointments if a.barber_id == barber.id]
+        booked = [a for a in own if a.status in BOOKED]
+        available = working_minutes(hours_by_barber.get(barber.id, []), days)
+        stats.append(
+            BarberStats(
+                barber_id=barber.id,
+                name=barber.name,
+                appointments=len(booked),
+                revenue=revenue(own),
+                occupancy=percent(sum(minutes(a) for a in booked), available),
+            )
+        )
+    return sorted(stats, key=lambda s: s.occupancy, reverse=True)
+
+
+def top_services(appointments: list[Appointment], limit: int = 5) -> list[ServiceStats]:
+    counts: dict[int, ServiceStats] = {}
+    for a in appointments:
+        if a.status not in BOOKED:
+            continue
+        item = counts.setdefault(
+            a.service_id,
+            ServiceStats(service_id=a.service_id, name=a.service.name, appointments=0, value=0),
+        )
+        item.appointments += 1
+        item.value += a.service.price
+    return sorted(counts.values(), key=lambda s: s.appointments, reverse=True)[:limit]
