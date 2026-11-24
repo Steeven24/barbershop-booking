@@ -30,7 +30,7 @@ agenda, the team and the schedule from an admin panel.
 **For the barbershop**
 
 - Admin panel with secure login (JWT, Argon2 password hashing)
-- Daily agenda with filters, a summary of the day and one-click status changes
+- Daily agenda as a per-barber timeline (or list), day stats and a detail panel with status actions
 - Manage barbers, services and each barber's weekly schedule
 
 **Under the hood**
