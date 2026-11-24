@@ -60,6 +60,16 @@ def minutes(appointment: Appointment) -> int:
     return int((appointment.end_at - appointment.start_at).total_seconds() // 60)
 
 
+def booked_minutes(appointments: Iterable[Appointment], days: list[date]) -> int:
+    """Minutes taken by appointments that fall on the given days."""
+    tz, wanted = settings.tz, set(days)
+    return sum(
+        minutes(a)
+        for a in appointments
+        if a.status in BOOKED and a.start_at.astimezone(tz).date() in wanted
+    )
+
+
 def working_minutes(hours: Iterable[WorkingHours], days: list[date]) -> int:
     by_weekday = {}
     for h in hours:
@@ -80,7 +90,7 @@ def percent(part: int, total: int) -> int:
 def totals(
     appointments: list[Appointment], hours: list[WorkingHours], days: list[date]
 ) -> PeriodTotals:
-    booked = sum(minutes(a) for a in appointments if a.status in BOOKED)
+    booked = booked_minutes(appointments, days)
     return PeriodTotals(
         revenue=revenue(appointments),
         completed=sum(a.status == S.COMPLETED for a in appointments),
@@ -120,7 +130,7 @@ def team_stats(db: Session, appointments: list[Appointment], days: list[date]) -
                 name=barber.name,
                 appointments=len(booked),
                 revenue=revenue(own),
-                occupancy=percent(sum(minutes(a) for a in booked), available),
+                occupancy=percent(booked_minutes(own, days), available),
             )
         )
     return sorted(stats, key=lambda s: s.occupancy, reverse=True)
@@ -152,15 +162,16 @@ def build_stats(db: Session, period: Period, today: date | None = None) -> Stats
     active_hours = list(
         db.scalars(select(WorkingHours).join(Barber).where(Barber.is_active.is_(True)))
     )
-    days = days_in(start, end)
+    # Occupancy of the current period only counts the days elapsed so far
+    elapsed = days_in(start, min(end, today))
 
     return StatsResponse(
         period=period,
         start=start,
         end=end,
-        current=totals(current, active_hours, days),
+        current=totals(current, active_hours, elapsed),
         previous=totals(previous, active_hours, days_in(prev_start, prev_end)),
         week=week_revenue(week, days_in(week_start, week_end)),
-        team=team_stats(db, current, days),
+        team=team_stats(db, current, elapsed),
         top_services=top_services(current),
     )

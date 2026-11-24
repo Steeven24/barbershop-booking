@@ -62,6 +62,10 @@ def test_day_stats_count_only_relevant_appointments(db_session, barber, service)
     assert (top.name, top.appointments, top.value) == ("Haircut", 3, Decimal("25.50"))
     assert [d.revenue for d in stats.week] == [Decimal("17.00")] + [Decimal(0)] * 6
 
+    # On a Monday only that day of the week has elapsed, so the occupancy matches
+    with db_session() as db:
+        assert build_stats(db, "week", today=MONDAY).current.occupancy == 50
+
 
 def test_stats_endpoint_requires_admin(public_client, client):
     assert public_client.get("/api/admin/stats").status_code == 401
