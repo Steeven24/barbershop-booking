@@ -1,0 +1,59 @@
+.card {
+  position: relative;
+  overflow: hidden;
+  min-height: 420px;
+  display: flex;
+  align-items: flex-end;
+  border-radius: 24px;
+  background: var(--color-ink);
+  color: #e9dfcf;
+}
+
+/* Barber pole stripe */
+.pole {
+  position: absolute;
+  top: 0;
+  right: 48px;
+  width: 56px;
+  height: 100%;
+  background: repeating-linear-gradient(
+    135deg,
+    var(--color-accent) 0 18px,
+    var(--color-surface) 18px 36px,
+    var(--color-ink) 36px 54px
+  );
+  opacity: 0.9;
+}
+
+.body {
+  position: relative;
+  width: 100%;
+  padding: 28px;
+  padding-right: 128px;
+}
+
+.kicker {
+  margin: 0 0 var(--space-1);
+  color: #c9a96e;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin: 0 0 var(--space-4);
+  color: var(--color-surface);
+  font-size: 1.75rem;
+}
+
+@media (max-width: 520px) {
+  .pole {
+    right: 20px;
+    width: 32px;
+  }
+  .body {
+    padding: 20px;
+    padding-right: 64px;
+  }
+}
