@@ -6,6 +6,8 @@ import type {
   BarberInput,
   Service,
   ServiceInput,
+  Stats,
+  StatsPeriod,
   WorkingHours,
 } from './types'
 
@@ -51,3 +53,5 @@ export const createService = (data: ServiceInput) =>
   request<Service>('/services', json('POST', data))
 export const updateService = (id: number, data: Partial<ServiceInput & { is_active: boolean }>) =>
   request<Service>(`/services/${id}`, json('PATCH', data))
+
+export const getStats = (period: StatsPeriod) => request<Stats>(`/admin/stats?period=${period}`)
