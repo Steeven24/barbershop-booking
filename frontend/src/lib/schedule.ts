@@ -26,7 +26,7 @@ export const toWorkingHours = (rows: DayRow[]): WorkingHours[] =>
 export const hasInvalidRange = (rows: DayRow[]) =>
   rows.some((row) => row.works && row.start >= row.end)
 
-const toMinutes = (time: string) => {
+export const toMinutes = (time: string) => {
   const [h, m] = time.split(':').map(Number)
   return h * 60 + m
 }
@@ -38,4 +38,16 @@ export function slotLabels(start: string, end: string, duration: number, step = 
     labels.push(`${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`)
   }
   return labels
+}
+
+/** Whole-hour range (in minutes) covering every working window and appointment of a day. */
+export function dayRange(windows: WorkingHours[], appointmentTimes: string[]) {
+  const times = appointmentTimes.map(toMinutes)
+  const starts = [...windows.map((w) => toMinutes(w.start_time)), ...times]
+  const ends = [...windows.map((w) => toMinutes(w.end_time)), ...times]
+  if (!starts.length) return { start: 9 * 60, end: 19 * 60 }
+  return {
+    start: Math.floor(Math.min(...starts) / 60) * 60,
+    end: Math.ceil(Math.max(...ends) / 60) * 60,
+  }
 }

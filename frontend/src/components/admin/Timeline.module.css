@@ -1,0 +1,162 @@
+.scroll {
+  overflow-x: auto;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+}
+
+.grid {
+  display: grid;
+  min-width: 640px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px var(--space-4);
+  border-bottom: 1px solid var(--color-line);
+  border-left: 1px solid var(--color-line);
+}
+
+.head > span:last-child {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.head small {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* Hour labels on the left, aligned with the column grid lines */
+.hours {
+  display: flex;
+  flex-direction: column;
+}
+
+.hours span {
+  box-sizing: border-box;
+  padding: 4px 10px 0 0;
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.column {
+  position: relative;
+  border-left: 1px solid var(--color-line);
+  /* One grid line per hour; the hour height comes from backgroundSize */
+  background: linear-gradient(180deg, transparent calc(100% - 1px), #efe9df calc(100% - 1px));
+  background-color: var(--color-surface);
+}
+
+/* Hours outside the barber's schedule */
+.off {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: grid;
+  place-items: center;
+  background: repeating-linear-gradient(135deg, #f3eee6 0 8px, #ebe4d8 8px 16px);
+  color: var(--color-muted);
+  font-size: 0.75rem;
+}
+
+.block {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  min-height: 32px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 6px 10px;
+  border: 1px solid;
+  border-left-width: 4px;
+  border-radius: 10px;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.block strong,
+.block span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.block strong {
+  font-size: 0.8rem;
+}
+
+.block span {
+  font-size: 0.75rem;
+}
+
+/* Short appointments: name and time on a single line */
+.block[data-compact] {
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  padding-block: 0;
+}
+
+.block[aria-pressed='true'] {
+  box-shadow: 0 0 0 3px var(--color-ink);
+}
+
+.block[data-status='pending'] {
+  border-color: var(--color-brass);
+  background: #f8eed8;
+  color: #4f3a0e;
+}
+
+.block[data-status='confirmed'] {
+  border-color: var(--color-success);
+  background: var(--color-success-soft);
+  color: #1f3d26;
+}
+
+.block[data-status='completed'] {
+  border-color: var(--color-ink);
+  background: #ece8e1;
+  color: var(--color-ink);
+}
+
+.block[data-status='cancelled'],
+.block[data-status='no_show'] {
+  border-color: var(--color-line-strong);
+  background: #f7f4ef;
+  color: #6b6258;
+}
+
+.block[data-status='cancelled'] strong {
+  text-decoration: line-through;
+}
+
+.now {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  height: 2px;
+  background: var(--color-accent);
+  pointer-events: none;
+}
