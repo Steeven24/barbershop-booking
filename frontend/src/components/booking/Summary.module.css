@@ -82,3 +82,49 @@
 .capitalize::first-letter {
   text-transform: uppercase;
 }
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin: 0;
+  padding-top: var(--space-4);
+  border-top: 1px dashed #d8cdbb;
+  color: var(--color-muted);
+}
+
+.total strong {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.cta {
+  height: 52px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  color: var(--color-surface);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cta:hover:not(:disabled) {
+  background: var(--color-accent-hover);
+}
+
+.cta:disabled {
+  background: var(--color-line);
+  color: #6b6258;
+  cursor: not-allowed;
+}
+
+.fine {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  text-align: center;
+}
