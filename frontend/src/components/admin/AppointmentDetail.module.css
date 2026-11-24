@@ -73,3 +73,54 @@
   font-weight: 600;
   text-align: right;
 }
+
+.notes {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.actions button {
+  height: 48px;
+  border: 1px solid #d8cdbb;
+  border-radius: 12px;
+  background: var(--color-surface);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* The main action spans the row; cancelling is a quiet text button at the end */
+.actions [data-tone='primary'] {
+  grid-column: 1 / -1;
+  border: 0;
+  background: var(--color-accent);
+  color: var(--color-surface);
+  font-weight: 700;
+}
+
+.actions [data-tone='danger'] {
+  grid-column: 1 / -1;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--color-danger);
+}
+
+.actions button:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.empty {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+}
