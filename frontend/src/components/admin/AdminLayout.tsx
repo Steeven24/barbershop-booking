@@ -16,8 +16,9 @@ export default function AdminLayout() {
             </Link>
             <nav className={styles.nav} aria-label="Panel">
               <NavLink to="/admin" end>
-                Agenda
+                Resumen
               </NavLink>
+              <NavLink to="/admin/agenda">Agenda</NavLink>
               <NavLink to="/admin/barberos">Barberos</NavLink>
               <NavLink to="/admin/servicios">Servicios</NavLink>
             </nav>
