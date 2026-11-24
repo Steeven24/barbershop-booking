@@ -3,13 +3,20 @@
   --color-bg: #f5f1ea;
   --color-surface: #fffdf9;
   --color-ink: #1f1b16;
-  --color-muted: #6b6258;
+  /* Darker greys keep small text above 4.5:1 on the paper background */
+  --color-muted: #5e554c;
+  --color-text-2: #4a423a;
   --color-line: #e2dacd;
+  --color-line-strong: #cfc4b3;
+  --color-surface-2: #f9f5ee;
   --color-accent: #7a2a26;
   --color-accent-hover: #63211e;
   --color-accent-soft: #f1e4e0;
   --color-brass: #a8834a;
+  --color-brass-text: #7d5f2c;
   --color-success: #3f6b47;
+  --color-success-soft: #e6efe7;
+  --color-warning-soft: #f3ead6;
   --color-danger: #a33b2f;
 
   --font-display: 'Fraunces', Georgia, serif;
@@ -25,8 +32,11 @@
   --space-16: 4rem;
 
   --radius: 6px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
   --shadow: 0 1px 2px rgb(31 27 22 / 6%), 0 4px 12px rgb(31 27 22 / 4%);
-  --content-width: 1080px;
+  --content-width: 1160px;
 }
 
 *,
@@ -66,4 +76,23 @@ button {
 :focus-visible {
   outline: 2px solid var(--color-brass);
   outline-offset: 2px;
+}
+
+/* Centered page column used by every public section */
+.container {
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+  box-sizing: border-box;
+}
+
+/* Small uppercase label above section titles */
+.eyebrow {
+  margin: 0;
+  color: var(--color-brass-text);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
 }
