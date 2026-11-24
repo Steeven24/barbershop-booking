@@ -22,7 +22,7 @@ agenda, the team and the schedule from an admin panel.
 
 **For customers**
 
-- Home page with services, prices, team and opening hours
+- Home page with services, team, opening hours and each barber's next free slot
 - 4-step booking: service → barber → day & time → contact details
 - Real-time availability from each barber's weekly schedule and existing bookings
 - Email when the booking is received, confirmed or cancelled
@@ -158,6 +158,7 @@ All settings come from environment variables; secrets are never committed.
 | `TIMEZONE`                             | `backend/.env`  | Business timezone (default `America/Guayaquil`)    |
 | `BUSINESS_NAME`                        | `backend/.env`  | Name used in emails                                |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_STARTTLS`, `EMAIL_FROM` | `backend/.env` | Email delivery. Without `SMTP_HOST` emails are only logged |
+| `VITE_BUSINESS_CITY`, `_ADDRESS`, `_WHATSAPP`, `_MAPS_URL`, `_MAPS_EMBED_URL` | `frontend/.env` | Public details on the home page; empty ones are hidden |
 
 Generate a secret key with:
 
@@ -190,6 +191,7 @@ Interactive docs at `/docs` when the backend runs locally. Admin endpoints need
 | PATCH  | `/api/services/{id}`              | Admin  | Update service               |
 | DELETE | `/api/services/{id}`              | Admin  | Deactivate service           |
 | GET    | `/api/availability`               | Public | Free slots for barber/day    |
+| GET    | `/api/availability/next`          | Public | Next free slot for a barber  |
 | POST   | `/api/appointments`               | Public | Book an appointment          |
 | GET    | `/api/appointments`               | Admin  | List with filters            |
 | GET    | `/api/appointments/{id}`          | Admin  | Get appointment              |
