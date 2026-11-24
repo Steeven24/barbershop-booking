@@ -282,3 +282,16 @@
   color: var(--color-danger);
   border-radius: var(--radius);
 }
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 1000px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
