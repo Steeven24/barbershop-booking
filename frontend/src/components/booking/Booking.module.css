@@ -389,3 +389,10 @@
   font-weight: 600;
   cursor: pointer;
 }
+
+/* Phones use the compact progress header instead of the step cards */
+@media (max-width: 640px) {
+  .steps {
+    display: none;
+  }
+}

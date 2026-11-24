@@ -128,3 +128,10 @@
   font-size: 0.8rem;
   text-align: center;
 }
+
+/* Below this width the sticky bottom bar takes over */
+@media (max-width: 860px) {
+  .summary {
+    display: none;
+  }
+}

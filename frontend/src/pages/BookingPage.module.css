@@ -1,12 +1,19 @@
+.flow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
 .layout {
   display: grid;
-  /* minmax(0, 1fr) lets the scrollable day picker shrink instead of widening the page */
-  grid-template-columns: minmax(0, 1fr) 300px;
-  gap: var(--space-12);
+  /* minmax(0, 1fr) lets the day picker shrink instead of widening the page */
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: var(--space-8);
 }
 
 .title {
-  font-size: 2rem;
+  margin-bottom: var(--space-6);
+  font-size: 2.5rem;
 }
 
 .note {
@@ -24,6 +31,14 @@
 @media (max-width: 860px) {
   .layout {
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-8);
+  }
+}
+
+@media (max-width: 640px) {
+  .flow {
+    gap: var(--space-6);
+  }
+  .title {
+    font-size: 1.9rem;
   }
 }

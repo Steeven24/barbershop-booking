@@ -5,6 +5,8 @@ import BarberStep from '../components/booking/BarberStep'
 import BookingConfirmed from '../components/booking/BookingConfirmed'
 import BookingSummary, { type SummaryAction } from '../components/booking/BookingSummary'
 import DetailsStep from '../components/booking/DetailsStep'
+import MobileBar from '../components/booking/MobileBar'
+import MobileProgress from '../components/booking/MobileProgress'
 import ServiceStep from '../components/booking/ServiceStep'
 import SlotStep from '../components/booking/SlotStep'
 import StepIndicator from '../components/booking/StepIndicator'
@@ -65,7 +67,8 @@ function BookingFlow({ onRestart }: { onRestart: () => void }) {
     action = { label, disabled: flow.submitting, form: DETAILS_FORM_ID }
   }
   return (
-    <section>
+    <section className={styles.flow}>
+      <MobileProgress current={flow.step} />
       <StepIndicator current={flow.step} values={stepValues} onSelect={flow.setStep} />
       <div className={styles.layout}>
         <div>
@@ -112,6 +115,7 @@ function BookingFlow({ onRestart }: { onRestart: () => void }) {
           onChange={() => flow.setStep(flow.barber ? 1 : 0)}
         />
       </div>
+      {action && <MobileBar service={flow.service} slot={flow.slot} action={action} />}
     </section>
   )
 }
