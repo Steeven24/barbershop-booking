@@ -17,7 +17,7 @@ export function useBookingFlow() {
   const chooseService = (value: Service) => {
     setService(value)
     setSlot(null) // a different duration changes which slots are free
-    setStep(1)
+    setStep(barber ? 2 : 1)
   }
   const chooseBarber = (value: Barber) => {
     setBarber(value)
@@ -28,6 +28,13 @@ export function useBookingFlow() {
     setSlot(value)
     setError(null)
     setStep(3)
+  }
+
+  /** Start with a service and/or barber already chosen (links from the home page). */
+  const preselect = (preService: Service | null, preBarber: Barber | null) => {
+    setService(preService)
+    setBarber(preBarber)
+    setStep(preService ? (preBarber ? 2 : 1) : 0)
   }
 
   async function submit(details: CustomerDetails) {
@@ -62,6 +69,6 @@ export function useBookingFlow() {
 
   return {
     step, service, barber, day, slot, submitting, error, appointment,
-    setStep, setDay, chooseService, chooseBarber, chooseSlot, submit,
+    setStep, setDay, chooseService, chooseBarber, chooseSlot, preselect, submit,
   }
 }

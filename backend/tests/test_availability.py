@@ -51,3 +51,21 @@ def test_cancelled_appointment_frees_the_slot(client, barber, service, next_mond
     client.patch(f"/api/appointments/{appointment['id']}/status", json={"status": "cancelled"})
 
     assert len(get_slots(client, barber, service, next_monday)) == 11
+
+
+def test_next_available_skips_to_first_working_day(client, barber, service, next_monday):
+    params = {"barber_id": barber["id"], "service_id": service["id"]}
+    response = client.get("/api/availability/next", params=params)
+    assert response.status_code == 200
+    start = datetime.fromisoformat(response.json()["start_at"]).astimezone(settings.tz)
+    # The fixture barber only works on Mondays from 09:00
+    assert start.weekday() == 0
+    assert start.date() <= next_monday
+
+
+def test_next_available_is_null_without_schedule(client, service):
+    barber = client.post("/api/barbers", json={"name": "Sin horario"}).json()
+    params = {"barber_id": barber["id"], "service_id": service["id"]}
+    response = client.get("/api/availability/next", params=params)
+    assert response.status_code == 200
+    assert response.json() is None

@@ -45,3 +45,18 @@ export function shiftDay(day: string, delta: number): string {
   date.setDate(date.getDate() + delta)
   return isoDay.format(date)
 }
+
+const shortDayFormat = new Intl.DateTimeFormat('es-EC', {
+  timeZone: BUSINESS_TZ,
+  weekday: 'short',
+  day: 'numeric',
+})
+
+/** "Hoy", "Mañana" or a short day like "Mié 25" for an ISO datetime. */
+export function relativeDay(iso: string): string {
+  const day = isoDay.format(new Date(iso))
+  if (day === today()) return 'Hoy'
+  if (day === shiftDay(today(), 1)) return 'Mañana'
+  const label = shortDayFormat.format(new Date(iso)).replace('.', '')
+  return label.charAt(0).toUpperCase() + label.slice(1)
+}

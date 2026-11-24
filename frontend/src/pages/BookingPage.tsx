@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useSearchParams } from 'react-router'
 import { getBarbers, getServices } from '../api/catalog'
 import BarberStep from '../components/booking/BarberStep'
 import BookingConfirmed from '../components/booking/BookingConfirmed'
@@ -17,6 +18,18 @@ function BookingFlow({ onRestart }: { onRestart: () => void }) {
   const services = useFetch(getServices)
   const barbers = useFetch(getBarbers)
   const flow = useBookingFlow()
+  const [params] = useSearchParams()
+  const preselected = useRef(false)
+  const { preselect } = flow
+
+  // Apply ?servicio= and ?barbero= once the catalog has loaded
+  useEffect(() => {
+    if (preselected.current || !services.data || !barbers.data) return
+    preselected.current = true
+    const service = services.data.find((s) => s.id === Number(params.get('servicio')))
+    const barber = barbers.data.find((b) => b.id === Number(params.get('barbero')))
+    if (service || barber) preselect(service ?? null, barber ?? null)
+  }, [services.data, barbers.data, params, preselect])
 
   if (flow.appointment && flow.service && flow.barber) {
     return (
@@ -78,5 +91,9 @@ function BookingFlow({ onRestart }: { onRestart: () => void }) {
 export default function BookingPage() {
   // Changing the key remounts the flow, which resets every step
   const [attempt, setAttempt] = useState(0)
-  return <BookingFlow key={attempt} onRestart={() => setAttempt((n) => n + 1)} />
+  return (
+    <div className="container page">
+      <BookingFlow key={attempt} onRestart={() => setAttempt((n) => n + 1)} />
+    </div>
+  )
 }
