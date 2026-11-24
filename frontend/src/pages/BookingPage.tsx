@@ -10,6 +10,7 @@ import SlotStep from '../components/booking/SlotStep'
 import StepIndicator from '../components/booking/StepIndicator'
 import { useBookingFlow } from '../hooks/useBookingFlow'
 import { useFetch } from '../hooks/useFetch'
+import { formatTime, relativeDay } from '../lib/dates'
 import styles from './BookingPage.module.css'
 
 const TITLES = ['Elige un servicio', 'Elige a tu barbero', '¿Cuándo vienes?', 'Tus datos']
@@ -43,9 +44,17 @@ function BookingFlow({ onRestart }: { onRestart: () => void }) {
   }
 
   const loadError = services.error || barbers.error
+  const stepValues = [
+    flow.service?.name ?? 'Elige uno',
+    flow.barber?.name ?? 'Elige uno',
+    flow.slot
+      ? `${relativeDay(flow.slot.start_at)} · ${formatTime(flow.slot.start_at)}`
+      : 'Elige un horario',
+    'Nombre y contacto',
+  ]
   return (
     <section>
-      <StepIndicator current={flow.step} onSelect={flow.setStep} />
+      <StepIndicator current={flow.step} values={stepValues} onSelect={flow.setStep} />
       <div className={styles.layout}>
         <div>
           <h1 className={styles.title}>{TITLES[flow.step]}</h1>
