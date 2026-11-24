@@ -83,3 +83,15 @@ def validate_booking(
         raise SchedulingError("Barber is not working at that time")
     if overlaps(start, end, busy_ranges(db, barber_id, start, end)):
         raise SchedulingError("That time slot is already booked")
+
+
+def next_available_slot(
+    db: Session, barber: Barber, duration_minutes: int, days_ahead: int = 14
+) -> tuple[datetime, datetime] | None:
+    """First free slot for the barber from today on, or None within `days_ahead` days."""
+    today = datetime.now(settings.tz).date()
+    for offset in range(days_ahead):
+        slots = available_slots(db, barber, duration_minutes, today + timedelta(days=offset))
+        if slots:
+            return slots[0]
+    return None
