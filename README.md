@@ -30,6 +30,7 @@ agenda, the team and the schedule from an admin panel.
 **For the barbershop**
 
 - Admin panel with secure login (JWT, Argon2 password hashing)
+- Business summary: revenue, attendance, occupancy and no-shows by day, week or month, compared with the same part of the previous period
 - Daily agenda as a per-barber timeline (or list), day stats and a detail panel with status actions
 - Manage barbers, services and each barber's weekly schedule
 
@@ -45,8 +46,8 @@ agenda, the team and the schedule from an admin panel.
 | Home | Admin agenda |
 | :---: | :---: |
 | <img src="docs/screenshots/home.png" alt="Home page" width="420"> | <img src="docs/screenshots/admin-agenda.png" alt="Admin daily agenda" width="420"> |
-| **Weekly schedule editor** | **Booking on mobile** |
-| <img src="docs/screenshots/admin-schedule.png" alt="Barber weekly schedule editor" width="420"> | <img src="docs/screenshots/booking-mobile.png" alt="Booking flow on mobile" width="190"> |
+| **Business summary** | **Booking on mobile** |
+| <img src="docs/screenshots/admin-summary.png" alt="Admin business summary" width="420"> | <img src="docs/screenshots/booking-mobile.png" alt="Booking flow on mobile" width="190"> |
 
 ## Tech stack
 
@@ -196,6 +197,7 @@ Interactive docs at `/docs` when the backend runs locally. Admin endpoints need
 | GET    | `/api/appointments`               | Admin  | List with filters            |
 | GET    | `/api/appointments/{id}`          | Admin  | Get appointment              |
 | PATCH  | `/api/appointments/{id}/status`   | Admin  | Confirm / complete / cancel  |
+| GET    | `/api/admin/stats?period=`        | Admin  | Summary for day, week, month |
 
 Appointment status flow: `pending → confirmed → completed | no_show`, and
 `pending | confirmed → cancelled`.
