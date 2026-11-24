@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router'
 import AuthProvider from './auth/AuthProvider'
 import RequireAuth from './auth/RequireAuth'
 import AdminLayout from './components/admin/AdminLayout'
+import BookingLayout from './components/booking/BookingLayout'
 import Layout from './components/Layout'
 import AgendaPage from './pages/admin/AgendaPage'
 import BarbersPage from './pages/admin/BarbersPage'
@@ -18,8 +19,11 @@ export default function App() {
         <Routes>
           <Route element={<Layout />}>
             <Route index element={<HomePage />} />
-            <Route path="reservar" element={<BookingPage />} />
             <Route path="*" element={<NotFoundPage />} />
+          </Route>
+
+          <Route element={<BookingLayout />}>
+            <Route path="reservar" element={<BookingPage />} />
           </Route>
 
           <Route path="admin/login" element={<LoginPage />} />
