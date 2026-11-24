@@ -154,6 +154,8 @@ def build_stats(db: Session, period: Period, today: date | None = None) -> Stats
     today = today or datetime.now(settings.tz).date()
     start, end = period_range(period, today)
     prev_start, prev_end = previous_range(period, start)
+    # Compare like with like: only as many days of the previous period as have elapsed now
+    prev_end = min(prev_end, prev_start + (min(end, today) - start))
     week_start, week_end = period_range("week", today)
 
     current = appointments_between(db, start, end)

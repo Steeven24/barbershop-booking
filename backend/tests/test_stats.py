@@ -64,7 +64,10 @@ def test_day_stats_count_only_relevant_appointments(db_session, barber, service)
 
     # On a Monday only that day of the week has elapsed, so the occupancy matches
     with db_session() as db:
-        assert build_stats(db, "week", today=MONDAY).current.occupancy == 50
+        week = build_stats(db, "week", today=MONDAY)
+    assert week.current.occupancy == 50
+    # Compared with last Monday only, not the whole previous week
+    assert week.previous.revenue == Decimal("8.50")
 
 
 def test_stats_endpoint_requires_admin(public_client, client):
