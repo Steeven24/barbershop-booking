@@ -209,6 +209,27 @@
   cursor: not-allowed;
 }
 
+.day[data-other-week] {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .weekArrow {
+    display: none;
+  }
+  .days {
+    display: flex;
+    overflow-x: auto;
+    margin-inline: calc(-1 * var(--space-6));
+    padding: 0 var(--space-6) var(--space-1);
+  }
+  .day,
+  .day[data-other-week] {
+    display: flex;
+    flex: 0 0 60px;
+  }
+}
+
 .day[aria-pressed='true'] {
   border-color: var(--color-ink);
   background: var(--color-ink);

@@ -13,7 +13,8 @@ interface Props {
 export default function WeekPicker({ days, openWeekdays, value, onChange }: Props) {
   const [page, setPage] = useState(() => Math.max(0, Math.floor(days.indexOf(value) / 7)))
   const pages = Math.ceil(days.length / 7)
-  const visible = days.slice(page * 7, page * 7 + 7)
+  // Every day is rendered: desktop shows one week at a time, phones scroll through all
+  const inPage = (index: number) => Math.floor(index / 7) === page
 
   return (
     <div className={styles.week}>
@@ -25,11 +26,12 @@ export default function WeekPicker({ days, openWeekdays, value, onChange }: Prop
         </svg>
       </button>
       <div className={styles.days} role="group" aria-label="Día">
-        {visible.map((day) => {
+        {days.map((day, index) => {
           const { weekday, number, month } = dayParts(day)
           const closed = !openWeekdays.has(weekdayOf(day))
           return (
             <button key={day} type="button" className={styles.day} disabled={closed}
+              data-other-week={!inPage(index) || undefined}
               aria-pressed={day === value} onClick={() => onChange(day)}>
               <span>{weekday}</span>
               <strong>{number}</strong>
