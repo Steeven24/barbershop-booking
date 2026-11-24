@@ -47,6 +47,67 @@
   font-size: 1.75rem;
 }
 
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: rgb(255 253 249 / 6%);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #3a332b;
+  color: var(--color-surface);
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.who {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.875rem;
+}
+
+.who strong {
+  color: var(--color-surface);
+  font-size: 1rem;
+}
+
+.book {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.book:hover {
+  background: #efe3d0;
+}
+
 @media (max-width: 520px) {
   .pole {
     right: 20px;
