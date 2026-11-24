@@ -78,5 +78,9 @@ function BookingFlow({ onRestart }: { onRestart: () => void }) {
 export default function BookingPage() {
   // Changing the key remounts the flow, which resets every step
   const [attempt, setAttempt] = useState(0)
-  return <BookingFlow key={attempt} onRestart={() => setAttempt((n) => n + 1)} />
+  return (
+    <div className="container page">
+      <BookingFlow key={attempt} onRestart={() => setAttempt((n) => n + 1)} />
+    </div>
+  )
 }

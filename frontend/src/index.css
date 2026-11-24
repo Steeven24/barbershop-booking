@@ -96,3 +96,8 @@ button {
   letter-spacing: 0.2em;
   text-transform: uppercase;
 }
+
+/* Vertical breathing room for simple pages (booking, 404) */
+.page {
+  padding-block: var(--space-12);
+}
