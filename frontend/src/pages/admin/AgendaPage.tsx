@@ -7,7 +7,7 @@ import {
 } from '../../api/admin'
 import type { Appointment, AppointmentStatus } from '../../api/types'
 import AgendaSummary from '../../components/admin/AgendaSummary'
-import AgendaToolbar from '../../components/admin/AgendaToolbar'
+import AgendaToolbar, { type AgendaView } from '../../components/admin/AgendaToolbar'
 import AppointmentRow from '../../components/admin/AppointmentRow'
 import styles from '../../components/admin/Agenda.module.css'
 import { useFetch } from '../../hooks/useFetch'
@@ -15,6 +15,7 @@ import { today } from '../../lib/dates'
 
 export default function AgendaPage() {
   const [day, setDay] = useState(today)
+  const [view, setView] = useState<AgendaView>('timeline')
   const [barberId, setBarberId] = useState<number | null>(null)
   const [status, setStatus] = useState<AppointmentStatus | null>(null)
   // Appointments changed in this session, applied on top of the fetched list
@@ -51,10 +52,12 @@ export default function AgendaPage() {
     <>
       <AgendaToolbar
         day={day}
+        view={view}
         barbers={barbers.data ?? []}
         barberId={barberId}
         status={status}
         onDayChange={setDay}
+        onViewChange={setView}
         onBarberChange={setBarberId}
         onStatusChange={setStatus}
       />
