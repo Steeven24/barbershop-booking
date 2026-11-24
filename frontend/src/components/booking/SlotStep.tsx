@@ -1,76 +1,70 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { getAvailability } from '../../api/booking'
+import { getBarberSchedule } from '../../api/catalog'
 import type { AvailableSlot } from '../../api/types'
 import { useFetch } from '../../hooks/useFetch'
-import { dayParts, formatTime, upcomingDays } from '../../lib/dates'
+import { formatTime, today, upcomingDays, weekdayOf } from '../../lib/dates'
+import { slotLabels } from '../../lib/schedule'
 import styles from './Booking.module.css'
+import SlotGroups from './SlotGroups'
+import WeekPicker from './WeekPicker'
 
-const DAYS = upcomingDays(14)
+const DAYS = upcomingDays(28)
 
 interface Props {
   barberId: number
   serviceId: number
+  duration: number
   day: string | null
   selected: AvailableSlot | null
   onDayChange: (day: string) => void
   onSelect: (slot: AvailableSlot) => void
 }
 
-export default function SlotStep({
-  barberId,
-  serviceId,
-  day,
-  selected,
-  onDayChange,
-  onSelect,
-}: Props) {
-  const activeDay = day ?? DAYS[0]
+export default function SlotStep(props: Props) {
+  const { barberId, serviceId, duration, day, selected, onDayChange, onSelect } = props
+  // Taken once: good enough to hide the times already gone while the page is open
+  const [now] = useState(() => formatTime(new Date().toISOString()))
+  const schedule = useFetch(useCallback(() => getBarberSchedule(barberId), [barberId]))
+  const openWeekdays = new Set(schedule.data?.map((hours) => hours.weekday))
+  // Fall back to the first open day when none is chosen yet or the chosen one is closed
+  const activeDay =
+    day && openWeekdays.has(weekdayOf(day))
+      ? day
+      : (DAYS.find((d) => openWeekdays.has(weekdayOf(d))) ?? DAYS[0])
+
   const fetchSlots = useCallback(
     () => getAvailability(barberId, serviceId, activeDay),
     [barberId, serviceId, activeDay],
   )
-  const { data: slots, loading, error } = useFetch(fetchSlots)
+  const slots = useFetch(fetchSlots)
+  const hours = schedule.data?.find((h) => h.weekday === weekdayOf(activeDay))
+  const labels = hours ? slotLabels(hours.start_time, hours.end_time, duration) : []
+  const hideUntil = activeDay === today() ? now : null
+
+  if (schedule.loading) return <p className={styles.note}>Cargando horarios…</p>
+  if (schedule.data?.length === 0) {
+    return <p className={styles.note}>Este barbero todavía no tiene horario. Elige otro.</p>
+  }
 
   return (
     <>
-      <div className={styles.days} role="group" aria-label="Día">
-        {DAYS.map((value) => {
-          const { weekday, number, month } = dayParts(value)
-          return (
-            <button
-              key={value}
-              type="button"
-              className={styles.day}
-              aria-pressed={value === activeDay}
-              onClick={() => onDayChange(value)}
-            >
-              <span>{weekday}</span>
-              <strong>{number}</strong>
-              <span>{month}</span>
-            </button>
-          )
-        })}
-      </div>
-
-      {loading && <p className={styles.note}>Buscando horarios…</p>}
-      {error && <p className={styles.note}>No pudimos cargar los horarios. Intenta de nuevo.</p>}
-      {slots && slots.length === 0 && (
-        <p className={styles.note}>No hay horarios libres este día. Prueba con otra fecha.</p>
+      <WeekPicker
+        days={DAYS}
+        openWeekdays={openWeekdays}
+        value={activeDay}
+        onChange={onDayChange}
+      />
+      {slots.loading && <p className={styles.note}>Buscando horarios…</p>}
+      {slots.error && (
+        <p className={styles.note}>No pudimos cargar los horarios. Intenta de nuevo.</p>
       )}
-      {slots && slots.length > 0 && (
-        <div className={styles.slots}>
-          {slots.map((slot) => (
-            <button
-              key={slot.start_at}
-              type="button"
-              className={styles.slot}
-              aria-pressed={slot.start_at === selected?.start_at}
-              onClick={() => onSelect(slot)}
-            >
-              {formatTime(slot.start_at)}
-            </button>
-          ))}
-        </div>
+      {slots.data && slots.data.length === 0 && (
+        <p className={styles.note}>No quedan horarios libres este día. Prueba con otra fecha.</p>
+      )}
+      {slots.data && slots.data.length > 0 && (
+        <SlotGroups labels={labels} free={slots.data} selected={selected}
+          hideUntil={hideUntil} onSelect={onSelect} />
       )}
     </>
   )

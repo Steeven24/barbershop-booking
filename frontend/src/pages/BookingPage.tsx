@@ -81,6 +81,7 @@ function BookingFlow({ onRestart }: { onRestart: () => void }) {
             <SlotStep
               barberId={flow.barber.id}
               serviceId={flow.service.id}
+              duration={flow.service.duration_minutes}
               day={flow.day}
               selected={flow.slot}
               onDayChange={flow.setDay}
