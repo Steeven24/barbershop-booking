@@ -85,7 +85,14 @@
 }
 
 @media (max-width: 640px) {
+  .inner {
+    flex-wrap: nowrap;
+  }
+  .brand span,
   .nav a:not(.cta) {
     display: none;
+  }
+  .nav .cta {
+    padding: 0 16px;
   }
 }
