@@ -25,3 +25,17 @@ export const toWorkingHours = (rows: DayRow[]): WorkingHours[] =>
 
 export const hasInvalidRange = (rows: DayRow[]) =>
   rows.some((row) => row.works && row.start >= row.end)
+
+const toMinutes = (time: string) => {
+  const [h, m] = time.split(':').map(Number)
+  return h * 60 + m
+}
+
+/** Every start time ("HH:MM") in a working window where an appointment of `duration` fits. */
+export function slotLabels(start: string, end: string, duration: number, step = 15): string[] {
+  const labels = []
+  for (let m = toMinutes(start); m + duration <= toMinutes(end); m += step) {
+    labels.push(`${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`)
+  }
+  return labels
+}

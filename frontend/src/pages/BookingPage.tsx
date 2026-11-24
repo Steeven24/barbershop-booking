@@ -3,13 +3,17 @@ import { useSearchParams } from 'react-router'
 import { getBarbers, getServices } from '../api/catalog'
 import BarberStep from '../components/booking/BarberStep'
 import BookingConfirmed from '../components/booking/BookingConfirmed'
-import BookingSummary from '../components/booking/BookingSummary'
+import BookingSummary, { type SummaryAction } from '../components/booking/BookingSummary'
 import DetailsStep from '../components/booking/DetailsStep'
+import MobileBar from '../components/booking/MobileBar'
+import MobileProgress from '../components/booking/MobileProgress'
 import ServiceStep from '../components/booking/ServiceStep'
 import SlotStep from '../components/booking/SlotStep'
 import StepIndicator from '../components/booking/StepIndicator'
+import { DETAILS_FORM_ID } from '../components/booking/steps'
 import { useBookingFlow } from '../hooks/useBookingFlow'
 import { useFetch } from '../hooks/useFetch'
+import { formatTime, relativeDay } from '../lib/dates'
 import styles from './BookingPage.module.css'
 
 const TITLES = ['Elige un servicio', 'Elige a tu barbero', '¿Cuándo vienes?', 'Tus datos']
@@ -43,9 +47,29 @@ function BookingFlow({ onRestart }: { onRestart: () => void }) {
   }
 
   const loadError = services.error || barbers.error
+  const stepValues = [
+    flow.service?.name ?? 'Elige uno',
+    flow.barber?.name ?? 'Elige uno',
+    flow.slot
+      ? `${relativeDay(flow.slot.start_at)} · ${formatTime(flow.slot.start_at)}`
+      : 'Elige un horario',
+    'Nombre y contacto',
+  ]
+  let action: SummaryAction | null = null
+  if (flow.step === 2) {
+    action = {
+      label: flow.slot ? 'Continuar con tus datos' : 'Elige un horario',
+      disabled: !flow.slot,
+      onClick: flow.continueToDetails,
+    }
+  } else if (flow.step === 3) {
+    const label = flow.submitting ? 'Reservando…' : 'Confirmar reserva'
+    action = { label, disabled: flow.submitting, form: DETAILS_FORM_ID }
+  }
   return (
-    <section>
-      <StepIndicator current={flow.step} onSelect={flow.setStep} />
+    <section className={styles.flow}>
+      <MobileProgress current={flow.step} />
+      <StepIndicator current={flow.step} values={stepValues} onSelect={flow.setStep} />
       <div className={styles.layout}>
         <div>
           <h1 className={styles.title}>{TITLES[flow.step]}</h1>
@@ -72,6 +96,7 @@ function BookingFlow({ onRestart }: { onRestart: () => void }) {
             <SlotStep
               barberId={flow.barber.id}
               serviceId={flow.service.id}
+              duration={flow.service.duration_minutes}
               day={flow.day}
               selected={flow.slot}
               onDayChange={flow.setDay}
@@ -79,11 +104,18 @@ function BookingFlow({ onRestart }: { onRestart: () => void }) {
             />
           )}
           {flow.step === 3 && (
-            <DetailsStep submitting={flow.submitting} error={flow.error} onSubmit={flow.submit} />
+            <DetailsStep error={flow.error} onSubmit={flow.submit} />
           )}
         </div>
-        <BookingSummary service={flow.service} barber={flow.barber} slot={flow.slot} />
+        <BookingSummary
+          service={flow.service}
+          barber={flow.barber}
+          slot={flow.slot}
+          action={action}
+          onChange={() => flow.setStep(flow.barber ? 1 : 0)}
+        />
       </div>
+      {action && <MobileBar service={flow.service} slot={flow.slot} action={action} />}
     </section>
   )
 }

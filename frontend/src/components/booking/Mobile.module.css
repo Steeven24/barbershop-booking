@@ -1,0 +1,93 @@
+.progress,
+.bar {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .progress {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+}
+
+.progressText {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: 0.8rem;
+}
+
+.progressText span {
+  color: var(--color-muted);
+}
+
+.bars {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.bars span {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-line);
+}
+
+.bars [data-state='done'] {
+  background: var(--color-success);
+}
+
+.bars [data-state='current'] {
+  background: var(--color-accent);
+}
+
+@media (max-width: 860px) {
+  .bar {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin: var(--space-6) calc(-1 * var(--space-6)) calc(-1 * var(--space-12));
+    padding: var(--space-3) var(--space-4) 20px;
+    border-top: 1px solid var(--color-line);
+    background: var(--color-surface);
+    box-shadow: 0 -8px 24px rgb(31 27 22 / 6%);
+  }
+}
+
+.barText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.barText span {
+  color: var(--color-muted);
+  font-size: 0.8rem;
+}
+
+.barText strong {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.barButton {
+  height: 52px;
+  padding: 0 var(--space-6);
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  color: var(--color-surface);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.barButton:disabled {
+  background: var(--color-line);
+  color: #6b6258;
+}

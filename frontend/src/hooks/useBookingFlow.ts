@@ -27,8 +27,8 @@ export function useBookingFlow() {
   const chooseSlot = (value: AvailableSlot) => {
     setSlot(value)
     setError(null)
-    setStep(3)
   }
+  const continueToDetails = () => slot && setStep(3)
 
   /** Start with a service and/or barber already chosen (links from the home page). */
   const preselect = (preService: Service | null, preBarber: Barber | null) => {
@@ -69,6 +69,6 @@ export function useBookingFlow() {
 
   return {
     step, service, barber, day, slot, submitting, error, appointment,
-    setStep, setDay, chooseService, chooseBarber, chooseSlot, preselect, submit,
+    setStep, setDay, chooseService, chooseBarber, chooseSlot, continueToDetails, preselect, submit,
   }
 }
