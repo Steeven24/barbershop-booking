@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session, joinedload
 
 from app.config import settings
 from app.models import Appointment, AppointmentStatus, Barber, WorkingHours
-from app.schemas.stats import BarberStats, DayRevenue, PeriodTotals, ServiceStats
+from app.schemas.stats import BarberStats, DayRevenue, PeriodTotals, ServiceStats, StatsResponse
 
 Period = Literal["day", "week", "month"]
 S = AppointmentStatus
@@ -138,3 +138,29 @@ def top_services(appointments: list[Appointment], limit: int = 5) -> list[Servic
         item.appointments += 1
         item.value += a.service.price
     return sorted(counts.values(), key=lambda s: s.appointments, reverse=True)[:limit]
+
+
+def build_stats(db: Session, period: Period, today: date | None = None) -> StatsResponse:
+    today = today or datetime.now(settings.tz).date()
+    start, end = period_range(period, today)
+    prev_start, prev_end = previous_range(period, start)
+    week_start, week_end = period_range("week", today)
+
+    current = appointments_between(db, start, end)
+    previous = appointments_between(db, prev_start, prev_end)
+    week = appointments_between(db, week_start, week_end)
+    active_hours = list(
+        db.scalars(select(WorkingHours).join(Barber).where(Barber.is_active.is_(True)))
+    )
+    days = days_in(start, end)
+
+    return StatsResponse(
+        period=period,
+        start=start,
+        end=end,
+        current=totals(current, active_hours, days),
+        previous=totals(previous, active_hours, days_in(prev_start, prev_end)),
+        week=week_revenue(week, days_in(week_start, week_end)),
+        team=team_stats(db, current, days),
+        top_services=top_services(current),
+    )
