@@ -335,3 +335,49 @@
   border: 1px solid var(--color-line);
   border-radius: var(--radius-lg);
 }
+
+.darkButton,
+.lightButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.darkButton {
+  background: var(--color-ink);
+  color: var(--color-surface);
+}
+
+.lightButton {
+  background: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.ctaBand {
+  background: var(--color-ink);
+  color: var(--color-bg);
+}
+
+.ctaInner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-6);
+  padding-block: 64px;
+}
+
+.ctaInner h2 {
+  margin: 0 0 var(--space-2);
+  font-size: 2.25rem;
+}
+
+.ctaInner p {
+  margin: 0;
+  color: #cbbfae;
+}
