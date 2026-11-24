@@ -63,3 +63,6 @@ export function relativeDay(iso: string): string {
 
 /** Weekday of a YYYY-MM-DD day with Monday = 0, like the API's working hours. */
 export const weekdayOf = (day: string) => (toDate(day).getDay() + 6) % 7
+
+/** YYYY-MM-DD of an ISO datetime, in the business timezone. */
+export const isoDayOf = (iso: string) => isoDay.format(new Date(iso))

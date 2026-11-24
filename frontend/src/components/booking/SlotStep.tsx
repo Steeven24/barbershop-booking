@@ -1,9 +1,9 @@
 import { useCallback, useState } from 'react'
-import { getAvailability } from '../../api/booking'
+import { getAvailability, getNextAvailable } from '../../api/booking'
 import { getBarberSchedule } from '../../api/catalog'
 import type { AvailableSlot } from '../../api/types'
 import { useFetch } from '../../hooks/useFetch'
-import { formatTime, today, upcomingDays, weekdayOf } from '../../lib/dates'
+import { formatTime, isoDayOf, today, upcomingDays, weekdayOf } from '../../lib/dates'
 import { slotLabels } from '../../lib/schedule'
 import styles from './Booking.module.css'
 import SlotGroups from './SlotGroups'
@@ -26,12 +26,16 @@ export default function SlotStep(props: Props) {
   // Taken once: good enough to hide the times already gone while the page is open
   const [now] = useState(() => formatTime(new Date().toISOString()))
   const schedule = useFetch(useCallback(() => getBarberSchedule(barberId), [barberId]))
+  const next = useFetch(
+    useCallback(() => getNextAvailable(barberId, serviceId), [barberId, serviceId]),
+  )
   const openWeekdays = new Set(schedule.data?.map((hours) => hours.weekday))
-  // Fall back to the first open day when none is chosen yet or the chosen one is closed
+  // Without a valid choice, open on the day of the next free slot (today may be over)
+  const nextDay = next.data ? isoDayOf(next.data.start_at) : null
   const activeDay =
     day && openWeekdays.has(weekdayOf(day))
       ? day
-      : (DAYS.find((d) => openWeekdays.has(weekdayOf(d))) ?? DAYS[0])
+      : (nextDay ?? DAYS.find((d) => openWeekdays.has(weekdayOf(d))) ?? DAYS[0])
 
   const fetchSlots = useCallback(
     () => getAvailability(barberId, serviceId, activeDay),
@@ -42,7 +46,7 @@ export default function SlotStep(props: Props) {
   const labels = hours ? slotLabels(hours.start_time, hours.end_time, duration) : []
   const hideUntil = activeDay === today() ? now : null
 
-  if (schedule.loading) return <p className={styles.note}>Cargando horarios…</p>
+  if (schedule.loading || next.loading) return <p className={styles.note}>Cargando horarios…</p>
   if (schedule.data?.length === 0) {
     return <p className={styles.note}>Este barbero todavía no tiene horario. Elige otro.</p>
   }
