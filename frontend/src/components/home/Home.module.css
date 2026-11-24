@@ -135,3 +135,50 @@
   margin: 0;
   font-size: 1.4rem;
 }
+
+.serviceTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.serviceIcon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-md);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.price {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 600;
+}
+
+.serviceDesc {
+  flex: 1;
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.95rem;
+}
+
+.serviceFoot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 14px;
+  border-top: 1px dashed #d8cdbb;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+}
+
+.serviceFoot a {
+  color: var(--color-accent);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+}
