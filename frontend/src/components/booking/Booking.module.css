@@ -1,29 +1,24 @@
 .steps {
   list-style: none;
-  display: flex;
-  gap: var(--space-2);
-  margin: 0 0 var(--space-8);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-3);
+  margin: 0;
   padding: 0;
-  border-bottom: 1px solid var(--color-line);
-}
-
-.steps li {
-  flex: 1;
 }
 
 .steps button {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-3) 0;
-  background: none;
-  border: 0;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  color: var(--color-muted);
-  cursor: pointer;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: inherit;
   text-align: left;
+  cursor: pointer;
 }
 
 .steps button:disabled {
@@ -31,39 +26,56 @@
 }
 
 .steps [data-state='current'] button {
-  color: var(--color-ink);
-  border-bottom-color: var(--color-accent);
-  font-weight: 600;
+  border-color: var(--color-accent);
+  background: var(--color-surface);
 }
 
 .steps [data-state='done'] button:hover {
-  color: var(--color-ink);
+  border-color: var(--color-brass);
 }
 
 .stepNumber {
-  width: 1.6rem;
-  height: 1.6rem;
-  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  flex: none;
   display: grid;
   place-items: center;
+  border: 1px solid var(--color-line-strong);
   border-radius: 50%;
-  border: 1px solid currentColor;
-  font-size: 0.8rem;
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  font-weight: 700;
 }
 
-.steps [data-state='done'] .stepNumber {
-  background: var(--color-ink);
-  border-color: var(--color-ink);
+.steps [data-state='current'] .stepNumber {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
   color: var(--color-surface);
 }
 
-@media (max-width: 640px) {
-  .stepLabel {
-    display: none;
-  }
-  .steps [data-state='current'] .stepLabel {
-    display: inline;
-  }
+.steps [data-state='done'] .stepNumber {
+  border-color: var(--color-success);
+  background: var(--color-success);
+  color: var(--color-surface);
+}
+
+.stepText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.stepLabel {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+}
+
+.stepValue {
+  overflow: hidden;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .options {
