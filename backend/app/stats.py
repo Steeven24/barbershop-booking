@@ -2,6 +2,7 @@
 
 from collections.abc import Iterable
 from datetime import date, datetime, time, timedelta
+from decimal import Decimal
 from typing import Literal
 
 from sqlalchemy import select
@@ -9,6 +10,7 @@ from sqlalchemy.orm import Session, joinedload
 
 from app.config import settings
 from app.models import Appointment, AppointmentStatus, WorkingHours
+from app.schemas.stats import DayRevenue, PeriodTotals
 
 Period = Literal["day", "week", "month"]
 S = AppointmentStatus
@@ -65,3 +67,34 @@ def working_minutes(hours: Iterable[WorkingHours], days: list[date]) -> int:
         end = h.end_time.hour * 60 + h.end_time.minute
         by_weekday[h.weekday] = by_weekday.get(h.weekday, 0) + end - start
     return sum(by_weekday.get(day.weekday(), 0) for day in days)
+
+
+def revenue(appointments: Iterable[Appointment]) -> Decimal:
+    return sum((a.service.price for a in appointments if a.status == S.COMPLETED), Decimal(0))
+
+
+def percent(part: int, total: int) -> int:
+    return round(part * 100 / total) if total else 0
+
+
+def totals(
+    appointments: list[Appointment], hours: list[WorkingHours], days: list[date]
+) -> PeriodTotals:
+    booked = sum(minutes(a) for a in appointments if a.status in BOOKED)
+    return PeriodTotals(
+        revenue=revenue(appointments),
+        completed=sum(a.status == S.COMPLETED for a in appointments),
+        no_shows=sum(a.status == S.NO_SHOW for a in appointments),
+        occupancy=percent(booked, working_minutes(hours, days)),
+    )
+
+
+def week_revenue(appointments: list[Appointment], days: list[date]) -> list[DayRevenue]:
+    tz = settings.tz
+    return [
+        DayRevenue(
+            date=day,
+            revenue=revenue(a for a in appointments if a.start_at.astimezone(tz).date() == day),
+        )
+        for day in days
+    ]
